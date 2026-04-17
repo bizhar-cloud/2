@@ -89,7 +89,6 @@
         }
         .login-btn:hover { background: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
 
-        /* Container and Button Styling */
         .code-row {
             display: flex;
             gap: 10px;
@@ -130,7 +129,7 @@
 
     <div class="lang-selector">
         <select id="langSelect" onchange="changeLanguage()">
-            <option value="badini">بادينى</option>
+            <option value="badini">بادینى</option>
             <option value="sorani">سۆرانی</option>
             <option value="ar">العربية</option>
             <option value="fa">فارسی</option>
@@ -197,32 +196,40 @@
             badini: { 
                 siTitle: "چوونەژوورێ", suTitle: "تۆمارکرن", user: "ناڤێ بکارئینەری", pass: "کۆدا نهێنی", 
                 siBtn: "داخلبوون", suBtn: "تۆمارکرن", switchSu: "حیسابەکا نوی چێکە", switchSi: "زڤڕین بۆ داخلبوونێ", 
-                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدی (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی" 
+                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدی (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی",
+                waMsg: "سڵاو، ئەز دخوازم کۆدەکێ چالاککرنێ بکڕم"
             },
             sorani: { 
                 siTitle: "چوونەژوورەوە", suTitle: "خۆتۆمارکردن", user: "ناوی بەکارهێنەر", pass: "وشەی نهێنی", 
                 siBtn: "چوونەژوورەوە", suBtn: "تۆمارکردن", switchSu: "هەژمارێکی نوێ دروست بکە", switchSi: "گەڕانەوە بۆ چوونەژوورەوە", 
-                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆد (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد" 
+                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆد (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد",
+                waMsg: "سڵاو، دەمەوێت کۆدێکی چالاککردن بکڕم"
             },
             ar: { 
                 siTitle: "تسجيل الدخول", suTitle: "إنشاء حساب", user: "اسم المستخدم", pass: "كلمة المرور", 
                 siBtn: "دخول", suBtn: "تسجيل", switchSu: "إنشاء حساب جديد", switchSi: "العودة للدخول", 
-                roleC: "كاشير", roleA: "مدير", code: "الرمز (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز" 
+                roleC: "كاشير", roleA: "مدير", code: "الرمز (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز",
+                waMsg: "مرحباً، أريد شراء كود التفعيل"
             },
             fa: { 
                 siTitle: "ورود به سیستم", suTitle: "ثبت نام", user: "نام کاربری", pass: "رمز عبور", 
                 siBtn: "ورود", suBtn: "ثبت نام", switchSu: "ایجاد حساب جدید", switchSi: "بازگشت به ورود", 
-                roleC: "صندوقدار", roleA: "مدیر", code: "کد (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد" 
+                roleC: "صندوقدار", roleA: "مدیر", code: "کد (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد",
+                waMsg: "سلام، می‌خواهم کد فعال‌سازی بخرم"
             },
             en: { 
                 siTitle: "SIGN IN", suTitle: "SIGN UP", user: "Username", pass: "Password", 
                 siBtn: "Login", suBtn: "Register", switchSu: "Create new account", switchSi: "Back to Login", 
-                roleC: "Cashier", roleA: "Admin", code: "Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy" 
+                roleC: "Cashier", roleA: "Admin", code: "Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy Code",
+                waMsg: "Hello, I want to buy an activation code"
             }
         };
 
         function openWhatsApp() {
-            window.open("https://wa.me/9647503644666?text=سڵاو،%20دەمەوێت%20کۆدی%20تایبەت%20بکڕم", "_blank");
+            const lang = document.getElementById('langSelect').value;
+            const message = encodeURIComponent(translations[lang].waMsg);
+            const phoneNumber = "9647503644666";
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
         }
 
         function changeLanguage() {
@@ -270,12 +277,12 @@
             if (isValid) {
                 let users = JSON.parse(localStorage.getItem('system_users') || '[]');
                 if(users.find(u => u.user === user)) {
-                    errorEl.innerText = "User already exists!";
+                    errorEl.innerText = (lang === 'en') ? "User already exists!" : "ئەڤ ناڤە یێ هەی!";
                     return;
                 }
                 users.push({ user, pass, role });
                 localStorage.setItem('system_users', JSON.stringify(users));
-                alert("Success! Account created.");
+                alert((lang === 'en') ? "Success! Account created." : "تەحیر! حیساب هاتە چێکرن.");
                 toggleForm();
             } else {
                 errorEl.innerText = translations[lang].error;
@@ -290,7 +297,7 @@
             const users = JSON.parse(localStorage.getItem('system_users') || '[]');
             const found = users.find(u => u.user === user && u.pass === pass);
             if (found) {
-                alert(`Welcome ${found.user}`);
+                alert(`${translations[lang].siTitle}: ${found.user}`);
             } else {
                 document.getElementById('si-error').innerText = translations[lang].error;
             }
