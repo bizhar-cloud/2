@@ -192,36 +192,39 @@
         const cashierCodes = ["993596", "276914", "908792", "251911", "126012", "596871", "732343", "701500", "487213"];
         const adminCodes = ["857626", "705446", "736741", "754549", "739260", "700832", "731720", "757148", "715093", "746958"];
 
+        // ئەڤە ئەو پشکەیە یا تە داخوازکری کو بهێتە گوهۆڕین
+        const customMessage = "(سڵاف، ئەز دێ شێم کۆدەکێ چالاککرنا سیستەمی بکڕم و حیسابا خو ئەکتیڤ بکەم)،(رازیمە ب بهایێ ٢٥٠$)بکڕم";
+
         const translations = {
             badini: { 
                 siTitle: "چوونەژوورێ", suTitle: "تۆمارکرن", user: "ناڤێ بکارئینەری", pass: "کۆدا نهێنی", 
                 siBtn: "داخلبوون", suBtn: "تۆمارکرن", switchSu: "حیسابەکا نوی چێکە", switchSi: "زڤڕین بۆ داخلبوونێ", 
                 roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدی (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی",
-                waMsg: "سڵاو، ئەز دخوازم کۆدەکێ چالاککرنێ بکڕم"
+                waMsg: customMessage
             },
             sorani: { 
                 siTitle: "چوونەژوورەوە", suTitle: "خۆتۆمارکردن", user: "ناوی بەکارهێنەر", pass: "وشەی نهێنی", 
                 siBtn: "چوونەژوورەوە", suBtn: "تۆمارکردن", switchSu: "هەژمارێکی نوێ دروست بکە", switchSi: "گەڕانەوە بۆ چوونەژوورەوە", 
                 roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆد (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد",
-                waMsg: "سڵاو، دەمەوێت کۆدێکی چالاککردن بکڕم"
+                waMsg: customMessage
             },
             ar: { 
                 siTitle: "تسجيل الدخول", suTitle: "إنشاء حساب", user: "اسم المستخدم", pass: "كلمة المرور", 
                 siBtn: "دخول", suBtn: "تسجيل", switchSu: "إنشاء حساب جديد", switchSi: "العودة للدخول", 
                 roleC: "كاشير", roleA: "مدير", code: "الرمز (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز",
-                waMsg: "مرحباً، أريد شراء كود التفعيل"
+                waMsg: customMessage
             },
             fa: { 
                 siTitle: "ورود به سیستم", suTitle: "ثبت نام", user: "نام کاربری", pass: "رمز عبور", 
                 siBtn: "ورود", suBtn: "ثبت نام", switchSu: "ایجاد حساب جدید", switchSi: "بازگشت به ورود", 
                 roleC: "صندوقدار", roleA: "مدیر", code: "کد (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد",
-                waMsg: "سلام، می‌خواهم کد فعال‌سازی بخرم"
+                waMsg: customMessage
             },
             en: { 
                 siTitle: "SIGN IN", suTitle: "SIGN UP", user: "Username", pass: "Password", 
                 siBtn: "Login", suBtn: "Register", switchSu: "Create new account", switchSi: "Back to Login", 
                 roleC: "Cashier", roleA: "Admin", code: "Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy Code",
-                waMsg: "Hello, I want to buy an activation code"
+                waMsg: customMessage
             }
         };
 
