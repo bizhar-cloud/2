@@ -2,321 +2,301 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/m2z3wCVb/60B41B3B-7295-4DB5-8210-F367261C1CE3.png">
-    
-    <title>Bizhar Rasheed | IT Specialist</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Management System</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&family=Fira+Code:wght@500;700&family=Poppins:wght@600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500;800&display=swap');
 
-        :root {
-            --it-blue: #00f2ff;
-            --it-green: #00ff41;
-            --it-red: #ff3e3e;
-            --it-dark: #060709;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body, html {
-            margin: 0; padding: 0; min-height: 100vh;
-            font-family: 'Noto Sans Arabic', sans-serif;
-            background: var(--it-dark);
-            color: #fff; overflow-x: hidden;
-        }
-
-        #bg-video {
-            position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-            z-index: -2; filter: brightness(0.12) contrast(1.1); object-fit: cover;
-        }
-
-        .overlay-dark {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, var(--it-dark) 100%);
-            z-index: -1;
-        }
-
-        .container {
-            position: relative; z-index: 1;
-            max-width: 420px; margin: 40px auto;
-            background: rgba(15, 15, 20, 0.7);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(0, 242, 255, 0.1);
-            border-radius: 40px;
-            padding: 50px 20px;
-            text-align: center;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.9);
-        }
-
-        /* --- 🚀 Ultra Modern Cyber Frame --- */
-        .logo-wrapper {
+        body {
+            background: #050505;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
             position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 40px;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+        }
+        body::before { background: linear-gradient(45deg, #ff0057, #e91e63); top: 10%; left: 10%; animation: animateBg 8s infinite alternate; }
+        body::after { background: linear-gradient(45deg, #00d2ff, #3a7bd5); bottom: 10%; right: 10%; animation: animateBg 8s infinite alternate-reverse; }
+
+        @keyframes animateBg { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+
+        .login-box {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; gap: 15px; text-align: center;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #fff;
+            background: linear-gradient(to right, #00d2ff, #ff0057, #00d2ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .lang-selector { position: absolute; top: 20px; left: 20px; z-index: 100; }
+        select { padding: 8px 12px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; outline: none; }
+
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 14px 18px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; outline: none; color: #fff; font-size: 0.95rem;
+        }
+        
+        [dir="rtl"] .input-group input { text-align: right; }
+        [dir="ltr"] .input-group input { text-align: left; }
+
+        .input-group label {
+            position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4); transition: 0.4s; pointer-events: none;
+        }
+
+        .input-group input:focus ~ label, .input-group input:valid ~ label {
+            top: -10px; right: 8px; font-size: 0.75rem; color: #00d2ff; background: #050505; padding: 0 5px;
+        }
+
+        .login-btn {
+            width: 100%; padding: 14px; background: #fff; border: none; border-radius: 12px;
+            cursor: pointer; font-weight: 800; text-transform: uppercase; transition: 0.4s;
+        }
+        .login-btn:hover { background: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
+
+        /* Container and Button Styling */
+        .code-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .code-row .input-group { margin-bottom: 0; flex: 1; }
+
+        .buy-btn {
+            height: 50px;
+            padding: 0 15px;
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            border-radius: 12px;
+            color: #25d366;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            background: #000;
-            padding: 5px;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2), inset 0 0 15px rgba(0, 255, 65, 0.2);
+            white-space: nowrap;
+        }
+        .buy-btn:hover {
+            background: #25d366;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
         }
 
-        .logo-wrapper::before {
-            content: "";
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            padding: 3px;
-            background: conic-gradient(from 0deg, transparent, var(--it-blue), transparent, var(--it-green), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: spin 3s linear infinite;
-        }
-
-        .logo-wrapper::after {
-            content: "";
-            position: absolute;
-            inset: -12px;
-            border: 1px solid rgba(0, 242, 255, 0.15);
-            border-radius: 50%;
-            border-left-color: var(--it-blue);
-            border-right-color: var(--it-green);
-            animation: spin 6s reverse linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            z-index: 5;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .logo-wrapper:hover .logo-img {
-            transform: scale(1.08) rotate(3deg);
-        }
-
-        .name-main { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 0; letter-spacing: 1px; }
-        .name-sub { font-size: 18px; color: var(--it-blue); font-weight: 700; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Animations */
-        @keyframes anim-rotate { 100% { transform: rotate(360deg); } }
-        @keyframes anim-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-        @keyframes anim-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
-        @keyframes anim-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
-
-        .anim-systems { animation: anim-rotate 3s linear infinite; }
-        .anim-security { animation: anim-pulse 1.2s ease-in-out infinite; }
-        .anim-ads { animation: anim-shake 0.6s ease-in-out infinite; }
-        .anim-devops { animation: anim-float 2.5s ease-in-out infinite; }
-
-        @keyframes phoneShake { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(12deg); } 30% { transform: rotate(-12deg); } }
-        .shake-icon { animation: phoneShake 0.8s infinite; display: inline-block; }
-
-        .dynamic-service-btn, .dynamic-contact-btn { overflow: hidden; position: relative; cursor: pointer; }
-
-        .dynamic-service-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 2px solid var(--it-green);
-            border-radius: 22px; padding: 18px; margin-bottom: 25px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.4s ease;
-        }
-
-        #service-text { font-family: 'Poppins', sans-serif; font-size: 19px; font-weight: 700; }
-        #service-desc { font-size: 13px; font-weight: 400; opacity: 0.9; line-height: 1.5; }
-
-        .dynamic-contact-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 18px; padding: 20px; text-decoration: none; 
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            border: 2px solid var(--it-blue); margin-bottom: 25px;
-            transition: all 0.4s;
-        }
-
-        .content-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: all 0.5s ease; width: 100%; }
-        .inner-title-row { display: flex; align-items: center; gap: 12px; }
-
-        .exit-up { opacity: 0; transform: translateY(-15px); }
-        .enter-bottom { opacity: 0; transform: translateY(15px); }
-
-        .flip-out { opacity: 0; transform: rotateX(90deg); filter: blur(4px); }
-        .flip-in { opacity: 0; transform: rotateX(-90deg); filter: blur(4px); }
-
-        .theme-green { border-color: var(--it-green); color: var(--it-green); box-shadow: 0 5px 15px rgba(0, 255, 65, 0.1); }
-        .theme-blue { border-color: var(--it-blue); color: var(--it-blue); box-shadow: 0 5px 15px rgba(0, 242, 255, 0.1); }
-        .theme-red { border-color: var(--it-red); color: var(--it-red); box-shadow: 0 5px 15px rgba(255, 62, 62, 0.1); }
-        .color-blue { border-color: var(--it-blue) !important; color: var(--it-blue) !important; }
-        .color-green { border-color: var(--it-green) !important; color: var(--it-green) !important; }
-
-        /* Social Icons Grid - Centered Design */
-        .social-row { 
-            display: flex; 
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px; 
-            margin-top: 25px; 
-        }
-
-        .s-link {
-            width: 65px; 
-            height: 65px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; text-decoration: none; font-size: 22px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .s-link:hover { transform: translateY(-8px); border-color: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .s-link.tiktok:hover { background: #000; color: #ff0050; }
-        .s-link.instagram:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
-        .s-link.facebook:hover { background: #1877F2; }
-        .s-link.snapchat:hover { background: #FFFC00; color: #000; }
-        .s-link.twitter:hover { background: #000; color: #fff; border-color: #fff; }
-        .s-link.email:hover { background: #ea4335; }
-        .s-link.yahoo:hover { background: #410093; }
-        .s-link.discord:hover { background: #5865F2; }
-
-        .footer { 
-            margin-top: 50px; font-size: 10px; opacity: 0.4; font-family: 'Fira Code', monospace; 
-            letter-spacing: 2px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;
-        }
+        .switch-form { color: #fff; font-size: 0.85rem; cursor: pointer; text-decoration: underline; margin-top: 10px; }
+        .hidden { display: none; }
+        .error { color: #ff0057; font-size: 0.85rem; min-height: 20px; }
     </style>
 </head>
 <body>
 
-<video autoplay muted loop playsinline id="bg-video">
-  <source src="https://assets.mixkit.co/videos/preview/mixkit-data-center-server-room-with-blue-lights-2738-large.mp4" type="video/mp4">
-</video>
-<div class="overlay-dark"></div>
-
-<div class="container">
-    <div class="logo-wrapper">
-        <img src="https://i.postimg.cc/MpNLqhYY/IMG-6220.jpg" class="logo-img" id="main-logo" alt="Bizhar">
+    <div class="lang-selector">
+        <select id="langSelect" onchange="changeLanguage()">
+            <option value="badini">بادينى</option>
+            <option value="sorani">سۆرانی</option>
+            <option value="ar">العربية</option>
+            <option value="fa">فارسی</option>
+            <option value="en">English</option>
+        </select>
     </div>
 
-    <div class="name-main">Bizhar Rasheed</div>
-    <div class="name-sub">Professional IT Solutions</div>
-
-    <div id="service-btn" class="dynamic-service-btn theme-green">
-        <div id="service-content" class="content-wrap">
-            <div class="inner-title-row">
-                <i id="service-icon" class="fa-solid fa-layer-group anim-systems"></i>
-                <span id="service-text">SYSTEMS</span>
+    <div class="login-box" id="signInBox">
+        <h2 id="si-title">SIGN IN</h2>
+        <form onsubmit="handleSignIn(event)">
+            <div class="input-group">
+                <input type="text" id="si-user" required>
+                <label id="si-label-user">Username</label>
             </div>
-            <span id="service-desc">Advanced Devices Configuration<br>بو دانان و پروگرامکرنا هەمی جیهازێن ئەلکترونی</span>
-        </div>
-    </div>
-
-    <a id="dynamic-call-btn" href="tel:+9647503644666" class="dynamic-contact-btn color-blue">
-        <div id="call-content" class="content-wrap">
-            <div style="display:flex; align-items:center; gap:12px;">
-                <i class="fa-solid fa-phone-volume shake-icon"></i>
-                <span id="phone-display-text">KOREK | +9647503644666</span>
+            <div class="input-group">
+                <input type="password" id="si-pass" required>
+                <label id="si-label-pass">Password</label>
             </div>
-        </div>
-    </a>
-
-    <div class="social-row">
-        <a href="https://www.tiktok.com/@bizharrasheed" class="s-link tiktok" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://www.instagram.com/bjarbergarey" class="s-link instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-        <a id="dynamic-wa-link" href="https://api.whatsapp.com/send?phone=9647503644666" class="s-link color-blue" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-        <a href="https://www.facebook.com/bizharrasheed" class="s-link facebook" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="https://www.snapchat.com/add/bizharrasheed" class="s-link snapchat" target="_blank"><i class="fa-brands fa-snapchat"></i></a>
-        
-        <a href="mailto:bjar.bergarey@gmail.com" class="s-link email" target="_blank"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://discord.gg/X7wS3jznjW" class="s-link discord" target="_blank"><i class="fa-brands fa-discord"></i></a>
-        <a href="mailto:bjar07503644666@yahoo.com" class="s-link yahoo" target="_blank"><i class="fa-brands fa-yahoo"></i></a>
-        <a href="https://twitter.com/BjarBergarey" class="s-link twitter" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <p class="error" id="si-error"></p>
+            <button type="submit" class="login-btn" id="si-btn">Sign In</button>
+        </form>
+        <p class="switch-form" onclick="toggleForm()" id="si-switch">Create Account</p>
     </div>
 
-    <div class="footer">
-        DEVELOPMENT BY: BIZHAR RASHEED  |  2026 ©
+    <div class="login-box hidden" id="signUpBox">
+        <h2 id="su-title">SIGN UP</h2>
+        <form onsubmit="handleSignUp(event)">
+            <div class="input-group">
+                <input type="text" id="su-user" required>
+                <label id="su-label-user">New Username</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="su-pass" required>
+                <label id="su-label-pass">New Password</label>
+            </div>
+            <div class="input-group">
+                <select id="su-role">
+                    <option value="cashier" id="opt-cashier">Cashier</option>
+                    <option value="admin" id="opt-admin">Administrator</option>
+                </select>
+            </div>
+            
+            <div class="code-row">
+                <div class="input-group">
+                    <input type="text" id="su-code" maxlength="6" required>
+                    <label id="su-label-code">6-Digit Code</label>
+                </div>
+                <button type="button" class="buy-btn" id="buy-code-btn" onclick="openWhatsApp()">
+                    کڕینا کۆدی
+                </button>
+            </div>
+
+            <p class="error" id="su-error"></p>
+            <button type="submit" class="login-btn" id="su-btn">Register</button>
+        </form>
+        <p class="switch-form" onclick="toggleForm()" id="su-switch">Back to Login</p>
     </div>
-</div>
 
-<script>
-    const services = [
-        { text: "SYSTEMS", desc: "Advanced Devices Configuration<br>بو دانان و پروگرامکرنا هەمی جیهازێن ئەلکترونی", icon: "fa-layer-group", theme: "theme-green", anim: "anim-systems" },
-        { text: "SECURITY", desc: "Social Media Protection & Security<br>بو پاراستنا ئەکاونتێن سوشیال میدیایێ", icon: "fa-shield-halved", theme: "theme-red", anim: "anim-security" },
-        { text: "ADS CREATOR", desc: "Professional Sponsored Campaigns<br>دروستکرن و دانانا سیستەمێن سپونسەریێ", icon: "fa-rectangle-ad", theme: "theme-blue", anim: "anim-ads" },
-        { text: "DEV_OPS", desc: "Software Development & Optimization<br>گەشە پێدانا پروگرامان و پێشخستنا وان", icon: "fa-code-branch", theme: "theme-green", anim: "anim-devops" }
-    ];
+    <script>
+        const cashierCodes = ["993596", "276914", "908792", "251911", "126012", "596871", "732343", "701500", "487213"];
+        const adminCodes = ["857626", "705446", "736741", "754549", "739260", "700832", "731720", "757148", "715093", "746958"];
 
-    let sIndex = 0;
-    setInterval(() => {
-        const content = document.getElementById("service-content");
-        const text = document.getElementById("service-text");
-        const desc = document.getElementById("service-desc");
-        const icon = document.getElementById("service-icon");
-        const btn = document.getElementById("service-btn");
+        const translations = {
+            badini: { 
+                siTitle: "چوونەژوورێ", suTitle: "تۆمارکرن", user: "ناڤێ بکارئینەری", pass: "کۆدا نهێنی", 
+                siBtn: "داخلبوون", suBtn: "تۆمارکرن", switchSu: "حیسابەکا نوی چێکە", switchSi: "زڤڕین بۆ داخلبوونێ", 
+                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدی (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی" 
+            },
+            sorani: { 
+                siTitle: "چوونەژوورەوە", suTitle: "خۆتۆمارکردن", user: "ناوی بەکارهێنەر", pass: "وشەی نهێنی", 
+                siBtn: "چوونەژوورەوە", suBtn: "تۆمارکردن", switchSu: "هەژمارێکی نوێ دروست بکە", switchSi: "گەڕانەوە بۆ چوونەژوورەوە", 
+                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆد (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد" 
+            },
+            ar: { 
+                siTitle: "تسجيل الدخول", suTitle: "إنشاء حساب", user: "اسم المستخدم", pass: "كلمة المرور", 
+                siBtn: "دخول", suBtn: "تسجيل", switchSu: "إنشاء حساب جديد", switchSi: "العودة للدخول", 
+                roleC: "كاشير", roleA: "مدير", code: "الرمز (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز" 
+            },
+            fa: { 
+                siTitle: "ورود به سیستم", suTitle: "ثبت نام", user: "نام کاربری", pass: "رمز عبور", 
+                siBtn: "ورود", suBtn: "ثبت نام", switchSu: "ایجاد حساب جدید", switchSi: "بازگشت به ورود", 
+                roleC: "صندوقدار", roleA: "مدیر", code: "کد (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد" 
+            },
+            en: { 
+                siTitle: "SIGN IN", suTitle: "SIGN UP", user: "Username", pass: "Password", 
+                siBtn: "Login", suBtn: "Register", switchSu: "Create new account", switchSi: "Back to Login", 
+                roleC: "Cashier", roleA: "Admin", code: "Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy" 
+            }
+        };
 
-        sIndex = (sIndex + 1) % services.length;
-        content.classList.add("exit-up");
+        function openWhatsApp() {
+            window.open("https://wa.me/9647503644666?text=سڵاو،%20دەمەوێت%20کۆدی%20تایبەت%20بکڕم", "_blank");
+        }
 
-        setTimeout(() => {
-            text.innerText = services[sIndex].text;
-            desc.innerHTML = services[sIndex].desc;
-            icon.className = "fa-solid " + services[sIndex].icon + " " + services[sIndex].anim;
-            btn.className = "dynamic-service-btn " + services[sIndex].theme;
-            content.classList.remove("exit-up");
-            content.classList.add("enter-bottom");
+        function changeLanguage() {
+            const lang = document.getElementById('langSelect').value;
+            const t = translations[lang];
             
-            setTimeout(() => {
-                content.classList.remove("enter-bottom");
-            }, 50);
-        }, 400);
-    }, 4000);
-
-    const contacts = [
-        { label: "KOREK | +9647503644666", tel: "tel:+9647503644666", wa: "https://api.whatsapp.com/send?phone=9647503644666", theme: "color-blue" },
-        { label: "KOREK | +9647503653355", tel: "tel:+9647503653355", wa: "https://api.whatsapp.com/send?phone=9647503653355", theme: "color-green" }
-    ];
-
-    let cIndex = 0;
-    setInterval(() => {
-        cIndex = (cIndex + 1) % contacts.length;
-        const current = contacts[cIndex];
-        const callBtn = document.getElementById("dynamic-call-btn");
-        const waLink = document.getElementById("dynamic-wa-link");
-        const label = document.getElementById("phone-display-text");
-        const callContent = document.getElementById("call-content");
-
-        callContent.classList.add("flip-out");
-        waLink.style.opacity = "0";
-
-        setTimeout(() => {
-            label.innerText = current.label;
-            callBtn.href = current.tel;
-            waLink.href = current.wa;
-            callBtn.className = "dynamic-contact-btn " + current.theme;
-            waLink.className = "s-link " + current.theme;
+            document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
             
-            callContent.classList.remove("flip-out");
-            callContent.classList.add("flip-in");
+            document.getElementById('si-title').innerText = t.siTitle;
+            document.getElementById('su-title').innerText = t.suTitle;
+            document.getElementById('si-label-user').innerText = t.user;
+            document.getElementById('su-label-user').innerText = t.user;
+            document.getElementById('si-label-pass').innerText = t.pass;
+            document.getElementById('su-label-pass').innerText = t.pass;
+            document.getElementById('si-btn').innerText = t.siBtn;
+            document.getElementById('su-btn').innerText = t.suBtn;
+            document.getElementById('si-switch').innerText = t.switchSu;
+            document.getElementById('su-switch').innerText = t.switchSi;
+            document.getElementById('su-label-code').innerText = t.code;
+            document.getElementById('opt-cashier').innerText = t.roleC;
+            document.getElementById('opt-admin').innerText = t.roleA;
+            document.getElementById('buy-code-btn').innerText = t.buyCode;
+        }
 
-            setTimeout(() => {
-                callContent.classList.remove("flip-in");
-                waLink.style.opacity = "1";
-            }, 50);
-        }, 400); 
-    }, 5000);
+        function toggleForm() {
+            document.getElementById('signInBox').classList.toggle('hidden');
+            document.getElementById('signUpBox').classList.toggle('hidden');
+            document.getElementById('si-error').innerText = "";
+            document.getElementById('su-error').innerText = "";
+        }
 
-    window.onload = function() {
-        var img = document.getElementById('main-logo');
-        if (!img.complete || img.naturalWidth === 0) { img.src = 'https://i.postimg.cc/MpNLqhYY/IMG-6220.jpg'; }
-    };
-</script>
+        function handleSignUp(e) {
+            e.preventDefault();
+            const user = document.getElementById('su-user').value;
+            const pass = document.getElementById('su-pass').value;
+            const role = document.getElementById('su-role').value;
+            const code = document.getElementById('su-code').value;
+            const errorEl = document.getElementById('su-error');
+            const lang = document.getElementById('langSelect').value;
 
+            let isValid = false;
+            if (role === 'cashier' && cashierCodes.includes(code)) isValid = true;
+            if (role === 'admin' && adminCodes.includes(code)) isValid = true;
+
+            if (isValid) {
+                let users = JSON.parse(localStorage.getItem('system_users') || '[]');
+                if(users.find(u => u.user === user)) {
+                    errorEl.innerText = "User already exists!";
+                    return;
+                }
+                users.push({ user, pass, role });
+                localStorage.setItem('system_users', JSON.stringify(users));
+                alert("Success! Account created.");
+                toggleForm();
+            } else {
+                errorEl.innerText = translations[lang].error;
+            }
+        }
+
+        function handleSignIn(e) {
+            e.preventDefault();
+            const user = document.getElementById('si-user').value;
+            const pass = document.getElementById('si-pass').value;
+            const lang = document.getElementById('langSelect').value;
+            const users = JSON.parse(localStorage.getItem('system_users') || '[]');
+            const found = users.find(u => u.user === user && u.pass === pass);
+            if (found) {
+                alert(`Welcome ${found.user}`);
+            } else {
+                document.getElementById('si-error').innerText = translations[lang].error;
+            }
+        }
+
+        changeLanguage();
+    </script>
 </body>
 </html>
