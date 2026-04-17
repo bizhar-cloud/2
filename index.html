@@ -83,41 +83,67 @@
             top: -10px; right: 8px; font-size: 0.75rem; color: #00d2ff; background: #050505; padding: 0 5px;
         }
 
+        .otp-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 15px;
+            direction: ltr;
+        }
+
+        .otp-input {
+            width: 45px;
+            height: 55px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .otp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .otp-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
         .login-btn {
             width: 100%; padding: 14px; background: #fff; border: none; border-radius: 12px;
             cursor: pointer; font-weight: 800; text-transform: uppercase; transition: 0.4s;
         }
         .login-btn:hover { background: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
 
-        .code-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .code-row .input-group { margin-bottom: 0; flex: 1; }
-
         .buy-btn {
-            height: 50px;
-            padding: 0 15px;
             background: rgba(37, 211, 102, 0.1);
             border: 1px solid rgba(37, 211, 102, 0.3);
-            border-radius: 12px;
+            border-radius: 8px;
             color: #25d366;
-            font-size: 0.85rem;
+            padding: 4px 12px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
         }
         .buy-btn:hover {
             background: #25d366;
             color: #fff;
-            box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
         }
 
         .switch-form { color: #fff; font-size: 0.85rem; cursor: pointer; text-decoration: underline; margin-top: 10px; }
@@ -172,14 +198,20 @@
                 </select>
             </div>
             
-            <div class="code-row">
-                <div class="input-group">
-                    <input type="text" id="su-code" maxlength="6" required>
-                    <label id="su-label-code">6-Digit Code</label>
-                </div>
+            <div class="otp-header">
+                <label class="otp-label" id="su-label-code">6-Digit Code</label>
                 <button type="button" class="buy-btn" id="buy-code-btn" onclick="openWhatsApp()">
                     کڕینا کۆدی
                 </button>
+            </div>
+
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 0)" onkeydown="moveBack(event, 0)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 1)" onkeydown="moveBack(event, 1)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)" onkeydown="moveBack(event, 2)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)" onkeydown="moveBack(event, 3)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)" onkeydown="moveBack(event, 4)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 5)" onkeydown="moveBack(event, 5)">
             </div>
 
             <p class="error" id="su-error"></p>
@@ -196,34 +228,54 @@
             badini: { 
                 siTitle: "چوونەژوورێ", suTitle: "تۆمارکرن", user: "ناڤێ بکارئینەری", pass: "کۆدا نهێنی", 
                 siBtn: "داخلبوون", suBtn: "تۆمارکرن", switchSu: "حیسابەکا نوی چێکە", switchSi: "زڤڕین بۆ داخلبوونێ", 
-                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدی (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی",
+                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدێ چالاککرنێ (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی",
                 waMsg: "سڵاف، دێ شێم کۆدەکێ چالاککرنا سیستەمی کڕم؟"
             },
             sorani: { 
                 siTitle: "چوونەژوورەوە", suTitle: "خۆتۆمارکردن", user: "ناوی بەکارهێنەر", pass: "وشەی نهێنی", 
                 siBtn: "چوونەژوورەوە", suBtn: "تۆمارکردن", switchSu: "هەژمارێکی نوێ دروست بکە", switchSi: "گەڕانەوە بۆ چوونەژوورەوە", 
-                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆد (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد",
+                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆدی چالاککردن (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد",
                 waMsg: "سڵاو، دەتوانم کۆدێکی چالاککردنی سیستم بکڕم؟"
             },
             ar: { 
                 siTitle: "تسجيل الدخول", suTitle: "إنشاء حساب", user: "اسم المستخدم", pass: "كلمة المرور", 
                 siBtn: "دخول", suBtn: "تسجيل", switchSu: "إنشاء حساب جديد", switchSi: "العودة للدخول", 
-                roleC: "كاشير", roleA: "مدير", code: "الرمز (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز",
+                roleC: "كاشير", roleA: "مدير", code: "رمز التفعيل (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز",
                 waMsg: "مرحباً، هل يمكنني شراء كود تفعيل النظام؟"
             },
             fa: { 
                 siTitle: "ورود به سیستم", suTitle: "ثبت نام", user: "نام کاربری", pass: "رمز عبور", 
                 siBtn: "ورود", suBtn: "ثبت نام", switchSu: "ایجاد حساب جدید", switchSi: "بازگشت به ورود", 
-                roleC: "صندوقدار", roleA: "مدیر", code: "کد (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد",
+                roleC: "صندوقدار", roleA: "مدیر", code: "کد فعال‌سازی (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد",
                 waMsg: "سلام، آیا می‌توانم کد فعال‌سازی سیستم را خریداری کنم؟"
             },
             en: { 
                 siTitle: "SIGN IN", suTitle: "SIGN UP", user: "Username", pass: "Password", 
                 siBtn: "Login", suBtn: "Register", switchSu: "Create new account", switchSi: "Back to Login", 
-                roleC: "Cashier", roleA: "Admin", code: "Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy Code",
+                roleC: "Cashier", roleA: "Admin", code: "Activation Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy Code",
                 waMsg: "Hello, can I purchase a system activation code?"
             }
         };
+
+        function moveToNext(input, index) {
+            if (input.value.length === 1 && index < 5) {
+                document.querySelectorAll('.otp-input')[index + 1].focus();
+            }
+        }
+
+        function moveBack(event, index) {
+            if (event.key === "Backspace" && index > 0 && event.target.value === "") {
+                document.querySelectorAll('.otp-input')[index - 1].focus();
+            }
+        }
+
+        function getFullCode() {
+            let code = "";
+            document.querySelectorAll('.otp-input').forEach(input => {
+                code += input.value;
+            });
+            return code;
+        }
 
         function openWhatsApp() {
             const lang = document.getElementById('langSelect').value;
@@ -259,6 +311,7 @@
             document.getElementById('signUpBox').classList.toggle('hidden');
             document.getElementById('si-error').innerText = "";
             document.getElementById('su-error').innerText = "";
+            document.querySelectorAll('.otp-input').forEach(input => input.value = "");
         }
 
         function handleSignUp(e) {
@@ -266,9 +319,14 @@
             const user = document.getElementById('su-user').value;
             const pass = document.getElementById('su-pass').value;
             const role = document.getElementById('su-role').value;
-            const code = document.getElementById('su-code').value;
+            const code = getFullCode();
             const errorEl = document.getElementById('su-error');
             const lang = document.getElementById('langSelect').value;
+
+            if(code.length < 6) {
+                errorEl.innerText = (lang === 'en') ? "Please enter 6 digits" : "هیڤیە ٦ ژمارا داخل بکە";
+                return;
+            }
 
             let isValid = false;
             if (role === 'cashier' && cashierCodes.includes(code)) isValid = true;
