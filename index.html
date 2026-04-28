@@ -2,307 +2,399 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یارییا بینگۆ - دیزاینا پێشکەفتی (0 - 99)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#9e0b0f">
+    
+    <meta name="apple-mobile-web-app-title" content="Bizhar">
+    <meta name="application-name" content="Bizhar">
+    
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/SsqXCWmB/3D691CC7-744A-4545-B415-184352388122.png">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/SsqXCWmB/3D691CC7-744A-4545-B415-184352388122.png">
+    
+    <title>یارییا بینگۆ - دیزاینا کلاسیک (1 - 99)</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
+        /* دیزاینا کلاسیک وەکی وێنەی */
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --neon-red: #ff0055;
-            --neon-green: #00ffcc;
-            --neon-blue: #00ccff;
-            --neon-orange: #ff9900;
-            --text-light: #ffffff;
-            --text-gray: #b0bec5;
+            --bg-dark-red: #9e0b0f;
+            --bg-left-yellow: #fce883;
+            --bg-right-gold: #cba85a;
+            --col-b: #00bfff;
+            --col-i: #dc143c;
+            --col-n: #a9a9a9;
+            --col-g: #32cd32;
+            --col-o: #ffd700;
         }
 
         body {
             font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-light);
+            background-color: #000;
+            color: #333;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            touch-action: manipulation; 
+            -webkit-user-select: none; 
+            user-select: none;
+        }
+        
+        input {
+            -webkit-user-select: auto;
+            user-select: auto;
         }
         
         .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: rgba(15, 32, 39, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid var(--card-border);
-            transition: all 0.5s ease;
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--bg-dark-red);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin: auto;
         }
 
-        .match-display {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(0, 204, 255, 0.3);
-            box-shadow: inset 0 0 15px rgba(0, 204, 255, 0.1);
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .match-text {
-            color: var(--neon-blue);
-            font-size: 22px;
-            font-weight: 900;
-            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
-            transition: all 0.3s ease;
-            text-align: center;
-            line-height: 1.4;
-        }
-        .match-text.hit {
-            color: var(--neon-green);
-            text-shadow: 0 0 20px var(--neon-green);
-            transform: scale(1.05);
-        }
-        .match-text .highlight-num {
-            color: var(--neon-red);
-            font-size: 1.3em;
-            text-shadow: 0 0 15px var(--neon-red);
-            font-family: Tahoma, sans-serif;
-            margin: 0 5px;
-        }
-
-        .celebration-toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: rgba(0, 255, 204, 0.85);
-            backdrop-filter: blur(15px);
-            color: #0f2027;
-            padding: 40px 60px;
-            border-radius: 30px;
-            font-size: 2.5em;
-            font-weight: 900;
-            text-align: center;
-            box-shadow: 0 0 50px var(--neon-green), inset 0 0 20px rgba(255,255,255,0.5);
-            border: 4px solid #fff;
-            z-index: 2000;
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-            line-height: 1.5;
-        }
-        .celebration-toast.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-        .celebration-toast span.winner-name {
-            color: #fff;
-            font-size: 1.3em;
-            text-shadow: 0 0 15px #000;
-            display: block;
-            margin: 10px 0;
-        }
-
-        /* دابەشکرنا شاشێ بۆ دوو بەشان د دەمێ پێدڤی دا */
         .layout-wrapper {
             display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        
+        .left-panel {
+            flex: 1.2;
+            background-color: var(--bg-left-yellow);
+            border-radius: 8px;
+            border: 2px solid #5a0000;
+            padding: 15px;
+            display: flex;
             flex-direction: column;
-            gap: 20px;
+            align-items: center;
         }
-        
-        .main-game-section {
-            width: 100%;
-        }
-        
-        .players-section {
-            width: 100%;
+
+        .right-panel {
+            flex: 1.5;
+            background-color: var(--bg-right-gold);
+            border-radius: 8px;
+            border: 2px solid #5a0000;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
         }
 
         .monitor-box {
-            background: #000;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 0 15px rgba(0, 204, 255, 0.2);
-            border: 2px solid #1a1a1a;
-            position: relative;
+            background: #ffffff;
+            border: 12px solid #f2c94c;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 -6px 10px rgba(0,0,0,0.1);
         }
         
         #drawnNumberDisplay {
-            font-size: 6em;
-            font-weight: 900;
-            color: var(--neon-red);
-            text-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
-            display: inline-block;
-            width: 130px;
-            height: 130px;
-            line-height: 130px;
-            border-radius: 50%;
-            border: 4px solid var(--neon-red);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), inset 0 0 20px rgba(255, 0, 85, 0.5);
-            transition: all 0.3s ease;
-            background: rgba(255, 0, 85, 0.05);
-            font-family: Tahoma, Arial, sans-serif; 
+            font-size: 5em;
+            font-weight: bold;
+            color: #666;
+            font-family: Arial, sans-serif;
         }
 
-        .pop-animation { animation: neonPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes neonPop { 0% { transform: scale(0.5); opacity: 0; text-shadow: none; box-shadow: none; } 50% { transform: scale(1.1); text-shadow: 0 0 50px var(--neon-red); box-shadow: 0 0 50px var(--neon-red); } 100% { transform: scale(1); opacity: 1; } }
+        .pop-animation { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
 
-        .bingo-board {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 1px solid var(--card-border);
-        }
-        .board-cell {
-            background: #1a1a2e;
-            color: #4a4e69;
-            font-weight: 700;
-            font-size: 14px;
-            padding: 8px 0;
+        .match-display {
+            background: var(--bg-dark-red);
+            width: 100%;
+            padding: 10px;
             border-radius: 8px;
-            transition: all 0.4s ease;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.02);
-            font-family: Tahoma, Arial, sans-serif;
+            margin-bottom: 15px;
+            border: 2px solid #5a0000;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .board-cell.drawn {
-            background: var(--neon-red);
-            color: white;
-            transform: scale(1.15);
-            box-shadow: 0 0 15px var(--neon-red);
-            text-shadow: 0 0 5px #fff;
-            z-index: 2;
-            border: 1px solid #fff;
+        .match-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
         }
+        .match-text.hit { color: #00ffcc; transform: scale(1.05); }
+        .match-text .highlight-num { color: #ffd700; font-size: 1.3em; font-family: Arial, sans-serif; margin: 0 5px; }
 
         .speed-control {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 12px;
-            border-radius: 12px;
             margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            font-weight: 700;
-            color: var(--neon-blue);
-            border: 1px solid rgba(0, 204, 255, 0.2);
+            font-weight: bold;
+            color: #8b0000;
         }
         .speed-control input {
-            width: 60px;
+            width: 50px;
             padding: 5px;
             text-align: center;
-            font-size: 16px;
-            background: #000;
-            color: var(--neon-blue);
-            border: 2px solid var(--neon-blue);
-            border-radius: 8px;
-            font-weight: 900;
-            outline: none;
-            text-shadow: 0 0 5px var(--neon-blue);
-            font-family: Tahoma, sans-serif;
+            border: 2px solid #8b0000;
+            border-radius: 5px;
+            font-weight: bold;
         }
 
-        .buttons-row { display: flex; gap: 15px; margin-bottom: 10px; }
-        .btn-modern { flex: 1; padding: 15px; font-size: 16px; font-weight: 700; font-family: inherit; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; color: white; position: relative; overflow: hidden; }
+        .buttons-row { display: flex; gap: 10px; width: 100%; margin-bottom: 20px; }
+        .btn-modern { 
+            flex: 1; 
+            padding: 15px 10px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            font-family: inherit; 
+            border: 2px solid #555; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            color: white; 
+            background: linear-gradient(to bottom, #d4d4d4, #7a7a7a);
+            text-shadow: 1px 1px 2px #000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+        }
+        .btn-modern:active { transform: translateY(2px); box-shadow: 0 2px 3px rgba(0,0,0,0.4); }
+        .btn-auto.stop-mode { background: linear-gradient(to bottom, #ff6b6b, #c00); }
+
+        .players-section {
+            width: 100%;
+            background: #fff;
+            border: 4px solid var(--bg-dark-red);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .players-header {
+            background: var(--bg-dark-red);
+            color: white;
+            padding: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .players-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
         
-        .btn-draw { background: linear-gradient(45deg, #005c97, #363795); box-shadow: 0 5px 15px rgba(0, 92, 151, 0.4); }
-        .btn-draw:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 92, 151, 0.6); }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .custom-input { padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-family: inherit; }
+        .btn-add { background: linear-gradient(to bottom, #b5b5b5, #7a7a7a); color: white; padding: 10px; font-size: 16px; font-weight: bold; border: 2px solid #555; border-radius: 6px; cursor: pointer; text-shadow: 1px 1px 2px #000; }
+        .btn-clear-all { background: linear-gradient(to bottom, #ff9999, #cc0000); color: white; padding: 10px; width: 100%; font-size: 14px; font-weight: bold; border: 2px solid #555; border-radius: 6px; cursor: pointer; text-shadow: 1px 1px 2px #000; margin-top: 5px; }
+
+        .players-list { text-align: right; max-height: 150px; overflow-y: auto; padding-right: 5px; }
+        .player-card { background: #f0f0f0; padding: 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #ccc; display: flex; flex-direction: column; gap: 5px; }
+        .player-card.safe { background: #90ee90; }
+        .player-name { font-weight: bold; font-size: 15px; display: flex; justify-content: space-between; color: #000; }
+        .safe-badge { color: #006400; font-size: 12px; }
+        .btn-edit { background: #ffd700; color: #000; border: 1px solid #b8860b; padding: 3px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
         
-        .btn-auto { background: linear-gradient(45deg, #11998e, #38ef7d); box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4); color: #000; }
-        .btn-auto:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56, 239, 125, 0.6); }
-        .btn-auto.stop-mode { background: linear-gradient(45deg, #cb2d3e, #ef473a); color: white; box-shadow: 0 5px 15px rgba(239, 71, 58, 0.4); }
-        .btn-auto.stop-mode:hover { box-shadow: 0 8px 20px rgba(239, 71, 58, 0.6); }
-
-        .divider-hr { border: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); margin: 25px 0; }
+        /* ----- ستایلا بەشێ ڕاستێ (بۆرد) ----- */
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); 
+            gap: 4px;
+            flex: 1;
+            margin-top: 5px; 
+            width: 100%;
+        }
         
-        .input-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
-        .custom-input { padding: 12px; font-size: 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--card-border); color: white; border-radius: 10px; text-align: right; font-family: inherit; outline: none; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 204, 255, 0.3); }
-        .btn-add { background: linear-gradient(45deg, #8E2DE2, #4A00E0); color: white; padding: 12px; font-size: 16px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(142, 45, 226, 0.4); transition: 0.3s; font-family: inherit; }
-        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(142, 45, 226, 0.6); }
+        .board-cell {
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1; 
+            border: 3px solid #ccc;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), 1px 2px 3px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
 
-        .btn-clear-all { background: rgba(255, 0, 85, 0.1); color: var(--neon-red); padding: 10px; width: 100%; font-size: 15px; font-weight: 700; border: 1px solid var(--neon-red); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: inherit; margin-bottom: 15px; }
-        .btn-clear-all:hover { background: var(--neon-red); color: white; box-shadow: 0 0 15px var(--neon-red); }
+        .board-cell:nth-child(10n + 1), .board-cell:nth-child(10n + 2) { border-color: var(--col-b); }
+        .board-cell:nth-child(10n + 3), .board-cell:nth-child(10n + 4) { border-color: var(--col-i); }
+        .board-cell:nth-child(10n + 5), .board-cell:nth-child(10n + 6) { border-color: var(--col-n); }
+        .board-cell:nth-child(10n + 7), .board-cell:nth-child(10n + 8) { border-color: var(--col-g); }
+        .board-cell:nth-child(10n + 9), .board-cell:nth-child(10n + 10) { border-color: var(--col-o); }
 
-        .players-list { text-align: right; }
-        .player-card { background: var(--card-bg); padding: 15px; margin-bottom: 15px; border-radius: 15px; border: 1px solid var(--card-border); border-right: 6px solid var(--neon-blue); display: flex; align-items: center; justify-content: space-between; transition: all 0.5s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .player-card.safe { background: rgba(0, 255, 204, 0.1); border-right: 6px solid var(--neon-green); opacity: 0.7; transform: scale(0.98); }
-        .player-info { flex: 1; }
-        .player-name { font-weight: 900; font-size: 18px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
-        .safe-badge { color: var(--neon-green); font-size: 13px; text-shadow: 0 0 5px var(--neon-green); font-weight: normal; }
-        .btn-edit { background: rgba(255, 153, 0, 0.2); color: var(--neon-orange); border: 1px solid var(--neon-orange); padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.3s; }
-        .btn-edit:hover { background: var(--neon-orange); color: #000; box-shadow: 0 0 10px var(--neon-orange); }
+        .board-cell.drawn {
+            background: radial-gradient(circle at 30% 30%, #da70d6, #800080);
+            color: white;
+            border-color: #4b0082;
+            transform: scale(1.15);
+        }
 
-        .number-circle { display: inline-block; width: 32px; height: 32px; line-height: 32px; text-align: center; background: rgba(255, 255, 255, 0.1); border-radius: 50%; margin: 5px 3px 0 3px; font-weight: 900; color: var(--text-gray); font-size: 14px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.05); font-family: Tahoma, sans-serif; }
-        .number-circle.matched { background: var(--neon-red); color: white; box-shadow: 0 0 15px var(--neon-red); border-color: var(--neon-red); transform: scale(1.1); }
-        .player-card.safe .number-circle.matched { background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); border-color: var(--neon-green); }
+        .number-circle { display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; background: #fff; border-radius: 50%; margin: 2px; font-weight: bold; color: #333; font-size: 12px; border: 2px solid #ccc; font-family: Arial; }
+        .number-circle.matched { background: radial-gradient(circle at 30% 30%, #da70d6, #800080); color: white; border-color: #4b0082; }
 
-        .winner-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); color: white; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
-        .loser-text { font-size: 4em; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--neon-red); text-shadow: 0 0 30px var(--neon-red); margin-bottom: 40px; text-align: center; animation: pulseText 1.5s infinite alternate; line-height: 1.3; }
-        .loser-text span { color: var(--neon-red); font-size: 1.2em; -webkit-text-stroke: 0; }
-        @keyframes pulseText { 0% { transform: scale(1); text-shadow: 0 0 20px var(--neon-red); } 100% { transform: scale(1.05); text-shadow: 0 0 50px var(--neon-red), 0 0 80px var(--neon-red); } }
-        .btn-restart { background: linear-gradient(45deg, #f12711, #f5af19); color: white; padding: 15px 40px; font-size: 20px; font-weight: 900; font-family: inherit; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 30px rgba(241, 39, 17, 0.5); transition: all 0.3s; text-transform: uppercase; }
-        .btn-restart:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(241, 39, 17, 0.7); }
+        .celebration-toast {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 215, 0, 0.95); backdrop-filter: blur(10px); color: #8b0000;
+            padding: 30px 50px; border-radius: 20px; font-size: 2em; font-weight: 900; text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); border: 4px solid #8b0000; z-index: 2000; opacity: 0; transition: all 0.4s; pointer-events: none;
+        }
+        .celebration-toast.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .celebration-toast span.winner-name { color: #000; font-size: 1.2em; display: block; margin: 10px 0; }
 
-        /* شێوازێ شاشەیا خوار یان کۆمپیوتەری (Landscape / Desktop Mode) */
-        @media (min-width: 900px), (orientation: landscape) and (min-width: 650px) {
-            .container {
-                max-width: 1100px;
-                padding: 25px;
-            }
-            .layout-wrapper {
-                flex-direction: row; /* دابەشکرن بۆ ڕاست و چەپ */
-                align-items: flex-start;
-                gap: 30px;
-            }
-            .main-game-section {
-                flex: 1.5; /* پتر جهی دگریت بۆ بۆردی و شاشێ */
-            }
-            .players-section {
-                flex: 1;
-                background: rgba(0, 0, 0, 0.25);
-                padding: 20px;
-                border-radius: 15px;
-                border: 1px solid var(--card-border);
-            }
-            .divider-hr {
-                display: none; /* هێلا نیڤەکێ بەرزە دکەین چونکە دابەش بوون */
-            }
-            .players-list {
-                max-height: 55vh; /* درێژیا وێ دێ هێتە کۆنترۆلکرن */
-                overflow-y: auto; /* ئەگەر یاریزان گەلەک بن، دێ ب خۆ سکڕۆل بیت */
-                padding-left: 10px;
+        .winner-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
+        .loser-text { font-size: 3em; font-weight: 900; color: #ffd700; text-align: center; margin-bottom: 20px; text-shadow: 2px 2px 4px #000; }
+        .loser-text span { color: #fff; font-size: 1.2em; }
+        .btn-restart { background: linear-gradient(to bottom, #d4d4d4, #7a7a7a); color: white; padding: 15px 40px; font-size: 20px; font-weight: 900; border: 2px solid #555; border-radius: 10px; cursor: pointer; text-shadow: 1px 1px 2px #000; }
+
+        @media (min-width: 900px) {
+            .container { max-width: 1200px; padding: 20px; }
+            .layout-wrapper { flex-direction: row; align-items: stretch; gap: 20px; }
+            .left-panel { flex: 1; justify-content: flex-start; }
+            .right-panel { flex: 1.5; justify-content: center; align-items: center; }
+            .bingo-board { width: 100%; max-width: 75vh; margin: auto; gap: 4px; }
+            .board-cell { font-size: 2.5vh; }
+            .players-list { max-height: 25vh; }
+        }
+
+        /* ===== چارەسەرییا لاندسکەیپ (فول سکرین و پاراستنا بازنەیان) ===== */
+        @media (orientation: landscape) and (max-height: 600px) {
+            body { 
+                padding: 0; 
+                margin: 0; 
+                height: 100vh; 
+                width: 100vw; 
+                overflow: hidden; 
+                background-color: #000;
             }
             
-            /* ستایلا سکڕۆلێ بۆ نیڤا چەپێ */
-            .players-list::-webkit-scrollbar { width: 6px; }
-            .players-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
-            .players-list::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
+            .container { 
+                padding: 6px; 
+                max-width: 100%; 
+                height: 100vh; 
+                border-radius: 0; 
+                display: flex; 
+                flex-direction: column; 
+                box-sizing: border-box;
+                margin: 0;
+            }
+            
+            .layout-wrapper { 
+                flex-direction: row; 
+                align-items: stretch; 
+                justify-content: center; 
+                gap: 4px; 
+                height: 100%; 
+                width: 100%;
+                overflow: hidden;
+            }
+            
+            .left-panel { 
+                flex: 1; 
+                max-width: 40%; 
+                height: 96vh; 
+                overflow-y: auto; 
+                padding: 12px; 
+                box-sizing: border-box;
+                margin: auto 0;
+            }
+            
+            .right-panel { 
+                flex: 0 0 auto; 
+                height: 96vh; 
+                padding: 2px; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                background: none;
+                border: none;
+                box-sizing: border-box;
+                overflow: hidden; 
+            }
+            
+            .players-section { 
+                flex: 1; 
+                max-width: 40%; 
+                display: flex; 
+                flex-direction: column; 
+                height: 96vh;
+                margin: auto 0;
+                padding: 12px;
+                box-sizing: border-box;
+            }
+
+            .bingo-board { 
+                display: grid;
+                grid-template-columns: repeat(10, 1fr);
+                grid-template-rows: repeat(10, 1fr);
+                height: min(94vh, 55vw); 
+                width: min(94vh, 55vw); 
+                gap: 3px; 
+                margin: auto;
+                padding: 5px;
+                box-sizing: border-box;
+                flex-shrink: 0; 
+                background: var(--bg-right-gold);
+                border: 2px solid #5a0000;
+                border-radius: 8px;
+            }
+            
+            .board-cell { 
+                font-size: min(3vh, 2vw); 
+                border-width: 1px; 
+                width: 100%;
+                height: 100%;
+                aspect-ratio: 1 / 1; 
+                margin: 0;
+            }
+            
+            .monitor-box { 
+                width: 20vh; 
+                height: 20vh; 
+                border-width: 6px; 
+                margin: 0 auto 10px; 
+                padding: 0;
+                flex-shrink: 0; 
+                aspect-ratio: 1 / 1;
+            }
+            #drawnNumberDisplay { font-size: 9vh; line-height: 1; } 
+            
+            .match-display { min-height: 40px; padding: 10px; margin-bottom: 10px; width: 100%; box-sizing: border-box; }
+            .match-text { font-size: 3vh; }
+            .match-text .highlight-num { font-size: 3.5vh; }
+            
+            .speed-control { margin-bottom: 10px; font-size: 2.8vh; padding: 10px;}
+            .speed-control input { padding: 4px; font-size: 2.8vh; width: 55px;}
+            
+            .buttons-row { margin-bottom: 10px; flex-direction: column; gap: 8px;}
+            .btn-modern { padding: 12px; font-size: 2.8vh; min-height: 45px; } 
+            
+            .players-header { font-size: 2.5vh; padding: 10px; }
+            .players-body { padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+            .input-group { margin-bottom: 0; gap: 8px;}
+            .custom-input { padding: 10px; font-size: 2.5vh; }
+            .btn-add { padding: 10px; font-size: 2.5vh; }
+            .btn-clear-all { padding: 10px; font-size: 2.2vh; margin-top: 0; margin-bottom: 5px;}
+            
+            .players-list { flex: 1; max-height: none; overflow-y: auto; padding-right: 5px; }
+            .player-card { padding: 10px; margin-bottom: 6px; }
+            .player-name { font-size: 2.5vh; }
+            .number-circle { width: 3.5vh; height: 3.5vh; line-height: 3.5vh; font-size: 2vh; }
+            
+            .celebration-toast { font-size: 2em; padding: 20px; width: 85%; }
         }
 
-        /* بۆ شاشەیێن گەلەک بچویک (Mobile Portrait) */
-        @media (max-width: 450px) {
-            .bingo-board { gap: 3px; padding: 10px; }
-            .board-cell { font-size: 12px; padding: 6px 0; }
-            #drawnNumberDisplay { width: 100px; height: 100px; line-height: 100px; font-size: 4em; }
-            .buttons-row { flex-direction: column; }
-            .match-text { font-size: 18px; }
-            .celebration-toast { font-size: 1.5em; padding: 20px; width: 85%; }
+        @media (max-width: 700px) and (orientation: portrait) {
+            .layout-wrapper { flex-direction: column; }
+            .bingo-board { gap: 3px; max-width: 100%; padding: 10px;}
+            .board-cell { font-size: 13px; border-width: 2px;}
+            #drawnNumberDisplay { font-size: 4em; }
         }
     </style>
 </head>
@@ -312,18 +404,17 @@
 
     <div class="container">
         
-        <div class="match-display" id="matchDisplay">
-            <div class="match-text" id="matchText">چاڤەڕێی ڕاکێشانێ یە...</div>
-        </div>
-        
         <div class="layout-wrapper">
             
-            <div class="main-game-section">
+            <div class="left-panel">
+                
                 <div class="monitor-box">
-                    <div id="drawnNumberDisplay">00</div>
+                    <div id="drawnNumberDisplay">--</div>
                 </div>
 
-                <div class="bingo-board" id="bingoBoard"></div>
+                <div class="match-display" id="matchDisplay">
+                    <div class="match-text" id="matchText">چاڤەڕێی ڕاکێشانێ یە...</div>
+                </div>
 
                 <div class="speed-control">
                     <label for="speedInput">لەزاتیا یاریێ (سانیە):</label>
@@ -334,20 +425,24 @@
                     <button class="btn-modern btn-draw" onclick="drawNumber()">ڕاکێشان (١ جار)</button>
                     <button class="btn-modern btn-auto" id="autoBtn" onclick="toggleAutoDraw()">ستارت (Start)</button>
                 </div>
+
             </div>
 
-            <hr class="divider-hr">
+            <div class="right-panel">
+                <div class="bingo-board" id="bingoBoard"></div>
+            </div>
 
             <div class="players-section">
-                <div class="input-group">
-                    <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
-                    <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 13, 5, 94)">
-                    <button class="btn-add" onclick="addPlayer()">+ یاریزانی زێدەبکە</button>
+                <div class="players-header">تۆمارکرنا یاریزانان</div>
+                <div class="players-body">
+                    <div class="input-group">
+                        <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
+                        <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 5, 12, 26)">
+                        <button class="btn-add" onclick="addPlayer()">Change (زێدەبکە)</button>
+                    </div>
+                    <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
+                    <div class="players-list" id="playersList"></div>
                 </div>
-                
-                <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
-
-                <div class="players-list" id="playersList"></div>
             </div>
 
         </div>
@@ -355,7 +450,7 @@
 
     <div class="winner-modal" id="winnerModal">
         <div class="loser-text" id="loserText"></div>
-        <button class="btn-restart" onclick="resetGame()">یارییەکا نوی دەستپێبکە (هەمان یاریزانان)</button>
+        <button class="btn-restart" onclick="resetGame()">یارییەکا نوی دەستپێبکە</button>
     </div>
 
     <script>
@@ -372,13 +467,13 @@
         };
 
         function saveGameState() {
-            localStorage.setItem('bingoPlayers', JSON.stringify(players));
-            localStorage.setItem('bingoDrawn', JSON.stringify(drawnNumbers));
+            localStorage.setItem('bingo1to99Players', JSON.stringify(players));
+            localStorage.setItem('bingo1to99Drawn', JSON.stringify(drawnNumbers));
         }
 
         function loadGameState() {
-            const savedPlayers = localStorage.getItem('bingoPlayers');
-            const savedDrawn = localStorage.getItem('bingoDrawn');
+            const savedPlayers = localStorage.getItem('bingo1to99Players');
+            const savedDrawn = localStorage.getItem('bingo1to99Drawn');
 
             if (savedPlayers) { players = JSON.parse(savedPlayers); }
             if (savedDrawn) { drawnNumbers = JSON.parse(savedDrawn); }
@@ -422,7 +517,7 @@
         function initBoard() {
             const board = document.getElementById('bingoBoard');
             board.innerHTML = '';
-            for(let i = 0; i <= 99; i++) {
+            for(let i = 1; i <= 99; i++) {
                 let cell = document.createElement('div');
                 cell.className = 'board-cell';
                 cell.id = 'cell-' + i;
@@ -438,8 +533,10 @@
             const numsStr = numsInput.value.trim();
 
             if(!name || !numsStr) { alert('هیڤییە ناڤ و ژماران ب دروستی داخل بکە!'); return; }
-            const numbers = numsStr.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
-            if(numbers.length === 0) { alert('هیڤییە ژمارەیێن دروست بنڤیسە!'); return; }
+            
+            const numbers = numsStr.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n) && n >= 1 && n <= 99);
+            
+            if(numbers.length === 0) { alert('هیڤییە ژمارەیێن دروست د ناڤبەرا 1 تا 99 بنڤیسە!'); return; }
 
             const uniqueNumbers = [...new Set(numbers)];
             if (uniqueNumbers.length !== numbers.length) {
@@ -480,7 +577,7 @@
                 players = [];
                 drawnNumbers = [];
                 saveGameState();
-                document.getElementById('drawnNumberDisplay').innerText = '00';
+                document.getElementById('drawnNumberDisplay').innerText = '--';
                 document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
                 document.getElementById('matchText').classList.remove('hit');
                 initBoard(); 
@@ -558,10 +655,13 @@
         }
 
         function drawNumber() {
-            if (drawnNumbers.length >= 100) { stopAutoMode(); alert('هەمی ژمارە دەرکەفتن!'); return; }
+            if (drawnNumbers.length >= 99) { stopAutoMode(); alert('هەمی ژمارە دەرکەفتن!'); return; }
 
             let drawn;
-            do { drawn = Math.floor(Math.random() * 100); } while (drawnNumbers.includes(drawn));
+            do { 
+                drawn = Math.floor(Math.random() * 99) + 1; 
+            } while (drawnNumbers.includes(drawn));
+            
             drawnNumbers.push(drawn);
             playSound('draw');
             saveGameState(); 
@@ -583,7 +683,7 @@
                 matchText.classList.add('hit');
                 setTimeout(() => { matchText.classList.remove('hit'); }, 1000);
             } else {
-                matchText.innerHTML = `ژمارە <span class="highlight-num">${drawn}</span> دەرکەفت!<br><span style="font-size: 0.75em; color: #b0bec5; font-weight: normal;">(یا چ کەسان نینە)</span>`;
+                matchText.innerHTML = `ژمارە <span class="highlight-num">${drawn}</span> دەرکەفت!<br><span style="font-size: 0.75em; color: #ccc; font-weight: normal;">(یا چ کەسان نینە)</span>`;
                 matchText.classList.remove('hit');
             }
             
@@ -632,7 +732,7 @@
 
             clearTimeout(celebrationTimeout);
             document.getElementById('celebrationToast').classList.remove('show');
-            document.getElementById('drawnNumberDisplay').innerText = '00';
+            document.getElementById('drawnNumberDisplay').innerText = '--';
             document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
             document.getElementById('matchText').classList.remove('hit');
             document.getElementById('winnerModal').style.display = 'none';
