@@ -3,365 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Management System</title>
+    <title>یارییا بینگۆ - دیزاینا پێشکەفتی (0 - 99)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500;800&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --neon-red: #ff0055;
+            --neon-green: #00ffcc;
+            --neon-blue: #00ccff;
+            --neon-orange: #ff9900;
+            --text-light: #ffffff;
+            --text-gray: #b0bec5;
+        }
 
         body {
-            background: #050505;
-            height: 100vh;
+            font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: rgba(15, 32, 39, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--card-border);
+            transition: all 0.5s ease;
+        }
+
+        .match-display {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 204, 255, 0.3);
+            box-shadow: inset 0 0 15px rgba(0, 204, 255, 0.1);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .match-text {
+            color: var(--neon-blue);
+            font-size: 22px;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .match-text.hit {
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            transform: scale(1.05);
+        }
+        .match-text .highlight-num {
+            color: var(--neon-red);
+            font-size: 1.3em;
+            text-shadow: 0 0 15px var(--neon-red);
+            font-family: Tahoma, sans-serif;
+            margin: 0 5px;
+        }
+
+        .celebration-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 255, 204, 0.85);
+            backdrop-filter: blur(15px);
+            color: #0f2027;
+            padding: 40px 60px;
+            border-radius: 30px;
+            font-size: 2.5em;
+            font-weight: 900;
+            text-align: center;
+            box-shadow: 0 0 50px var(--neon-green), inset 0 0 20px rgba(255,255,255,0.5);
+            border: 4px solid #fff;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            line-height: 1.5;
+        }
+        .celebration-toast.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .celebration-toast span.winner-name {
+            color: #fff;
+            font-size: 1.3em;
+            text-shadow: 0 0 15px #000;
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* دابەشکرنا شاشێ بۆ دوو بەشان د دەمێ پێدڤی دا */
+        .layout-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .main-game-section {
             width: 100%;
+        }
+        
+        .players-section {
+            width: 100%;
+        }
+
+        .monitor-box {
+            background: #000;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 0 15px rgba(0, 204, 255, 0.2);
+            border: 2px solid #1a1a1a;
+            position: relative;
+        }
+        
+        #drawnNumberDisplay {
+            font-size: 6em;
+            font-weight: 900;
+            color: var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
+            display: inline-block;
+            width: 130px;
+            height: 130px;
+            line-height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), inset 0 0 20px rgba(255, 0, 85, 0.5);
+            transition: all 0.3s ease;
+            background: rgba(255, 0, 85, 0.05);
+            font-family: Tahoma, Arial, sans-serif; 
+        }
+
+        .pop-animation { animation: neonPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes neonPop { 0% { transform: scale(0.5); opacity: 0; text-shadow: none; box-shadow: none; } 50% { transform: scale(1.1); text-shadow: 0 0 50px var(--neon-red); box-shadow: 0 0 50px var(--neon-red); } 100% { transform: scale(1); opacity: 1; } }
+
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card-border);
+        }
+        .board-cell {
+            background: #1a1a2e;
+            color: #4a4e69;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 8px 0;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.02);
+            font-family: Tahoma, Arial, sans-serif;
+        }
+        .board-cell.drawn {
+            background: var(--neon-red);
+            color: white;
+            transform: scale(1.15);
+            box-shadow: 0 0 15px var(--neon-red);
+            text-shadow: 0 0 5px #fff;
+            z-index: 2;
+            border: 1px solid #fff;
+        }
+
+        .speed-control {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            position: relative;
+            gap: 15px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 204, 255, 0.2);
         }
-
-        body::before, body::after {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: 0;
-        }
-        body::before { background: linear-gradient(45deg, #ff0057, #e91e63); top: 10%; left: 10%; animation: animateBg 8s infinite alternate; }
-        body::after { background: linear-gradient(45deg, #00d2ff, #3a7bd5); bottom: 10%; right: 10%; animation: animateBg 8s infinite alternate-reverse; }
-
-        @keyframes animateBg { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
-
-        .login-box {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 450px;
-            padding: 40px 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            backdrop-filter: blur(30px);
-            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
-            display: flex; flex-direction: column; gap: 15px; text-align: center;
-        }
-
-        h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            color: #fff;
-            background: linear-gradient(to right, #00d2ff, #ff0057, #00d2ff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
-        }
-
-        @keyframes shine { to { background-position: 200% center; } }
-
-        .lang-selector { position: absolute; top: 20px; left: 20px; z-index: 100; }
-        select { padding: 8px 12px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; outline: none; }
-
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
-        .input-group input, .input-group select {
-            width: 100%; padding: 14px 18px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; outline: none; color: #fff; font-size: 0.95rem;
-        }
-        
-        [dir="rtl"] .input-group input { text-align: right; }
-        [dir="ltr"] .input-group input { text-align: left; }
-
-        .input-group label {
-            position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.4); transition: 0.4s; pointer-events: none;
-        }
-
-        .input-group input:focus ~ label, .input-group input:valid ~ label {
-            top: -10px; right: 8px; font-size: 0.75rem; color: #00d2ff; background: #050505; padding: 0 5px;
-        }
-
-        .otp-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 15px;
-            direction: ltr;
-        }
-
-        .otp-input {
-            width: 45px;
-            height: 55px;
+        .speed-control input {
+            width: 60px;
+            padding: 5px;
             text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .otp-input:focus {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .otp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .otp-label {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
-        }
-
-        .login-btn {
-            width: 100%; padding: 14px; background: #fff; border: none; border-radius: 12px;
-            cursor: pointer; font-weight: 800; text-transform: uppercase; transition: 0.4s;
-        }
-        .login-btn:hover { background: #00d2ff; box-shadow: 0 0 30px rgba(0, 210, 255, 0.5); }
-
-        .buy-btn {
-            background: rgba(37, 211, 102, 0.1);
-            border: 1px solid rgba(37, 211, 102, 0.3);
+            font-size: 16px;
+            background: #000;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
             border-radius: 8px;
-            color: #25d366;
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .buy-btn:hover {
-            background: #25d366;
-            color: #fff;
+            font-weight: 900;
+            outline: none;
+            text-shadow: 0 0 5px var(--neon-blue);
+            font-family: Tahoma, sans-serif;
         }
 
-        .switch-form { color: #fff; font-size: 0.85rem; cursor: pointer; text-decoration: underline; margin-top: 10px; }
-        .hidden { display: none; }
-        .error { color: #ff0057; font-size: 0.85rem; min-height: 20px; }
+        .buttons-row { display: flex; gap: 15px; margin-bottom: 10px; }
+        .btn-modern { flex: 1; padding: 15px; font-size: 16px; font-weight: 700; font-family: inherit; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; color: white; position: relative; overflow: hidden; }
+        
+        .btn-draw { background: linear-gradient(45deg, #005c97, #363795); box-shadow: 0 5px 15px rgba(0, 92, 151, 0.4); }
+        .btn-draw:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 92, 151, 0.6); }
+        
+        .btn-auto { background: linear-gradient(45deg, #11998e, #38ef7d); box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4); color: #000; }
+        .btn-auto:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56, 239, 125, 0.6); }
+        .btn-auto.stop-mode { background: linear-gradient(45deg, #cb2d3e, #ef473a); color: white; box-shadow: 0 5px 15px rgba(239, 71, 58, 0.4); }
+        .btn-auto.stop-mode:hover { box-shadow: 0 8px 20px rgba(239, 71, 58, 0.6); }
+
+        .divider-hr { border: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); margin: 25px 0; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .custom-input { padding: 12px; font-size: 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--card-border); color: white; border-radius: 10px; text-align: right; font-family: inherit; outline: none; transition: 0.3s; }
+        .custom-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 204, 255, 0.3); }
+        .btn-add { background: linear-gradient(45deg, #8E2DE2, #4A00E0); color: white; padding: 12px; font-size: 16px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(142, 45, 226, 0.4); transition: 0.3s; font-family: inherit; }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(142, 45, 226, 0.6); }
+
+        .btn-clear-all { background: rgba(255, 0, 85, 0.1); color: var(--neon-red); padding: 10px; width: 100%; font-size: 15px; font-weight: 700; border: 1px solid var(--neon-red); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: inherit; margin-bottom: 15px; }
+        .btn-clear-all:hover { background: var(--neon-red); color: white; box-shadow: 0 0 15px var(--neon-red); }
+
+        .players-list { text-align: right; }
+        .player-card { background: var(--card-bg); padding: 15px; margin-bottom: 15px; border-radius: 15px; border: 1px solid var(--card-border); border-right: 6px solid var(--neon-blue); display: flex; align-items: center; justify-content: space-between; transition: all 0.5s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .player-card.safe { background: rgba(0, 255, 204, 0.1); border-right: 6px solid var(--neon-green); opacity: 0.7; transform: scale(0.98); }
+        .player-info { flex: 1; }
+        .player-name { font-weight: 900; font-size: 18px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+        .safe-badge { color: var(--neon-green); font-size: 13px; text-shadow: 0 0 5px var(--neon-green); font-weight: normal; }
+        .btn-edit { background: rgba(255, 153, 0, 0.2); color: var(--neon-orange); border: 1px solid var(--neon-orange); padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.3s; }
+        .btn-edit:hover { background: var(--neon-orange); color: #000; box-shadow: 0 0 10px var(--neon-orange); }
+
+        .number-circle { display: inline-block; width: 32px; height: 32px; line-height: 32px; text-align: center; background: rgba(255, 255, 255, 0.1); border-radius: 50%; margin: 5px 3px 0 3px; font-weight: 900; color: var(--text-gray); font-size: 14px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.05); font-family: Tahoma, sans-serif; }
+        .number-circle.matched { background: var(--neon-red); color: white; box-shadow: 0 0 15px var(--neon-red); border-color: var(--neon-red); transform: scale(1.1); }
+        .player-card.safe .number-circle.matched { background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); border-color: var(--neon-green); }
+
+        .winner-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); color: white; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
+        .loser-text { font-size: 4em; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--neon-red); text-shadow: 0 0 30px var(--neon-red); margin-bottom: 40px; text-align: center; animation: pulseText 1.5s infinite alternate; line-height: 1.3; }
+        .loser-text span { color: var(--neon-red); font-size: 1.2em; -webkit-text-stroke: 0; }
+        @keyframes pulseText { 0% { transform: scale(1); text-shadow: 0 0 20px var(--neon-red); } 100% { transform: scale(1.05); text-shadow: 0 0 50px var(--neon-red), 0 0 80px var(--neon-red); } }
+        .btn-restart { background: linear-gradient(45deg, #f12711, #f5af19); color: white; padding: 15px 40px; font-size: 20px; font-weight: 900; font-family: inherit; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 30px rgba(241, 39, 17, 0.5); transition: all 0.3s; text-transform: uppercase; }
+        .btn-restart:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(241, 39, 17, 0.7); }
+
+        /* شێوازێ شاشەیا خوار یان کۆمپیوتەری (Landscape / Desktop Mode) */
+        @media (min-width: 900px), (orientation: landscape) and (min-width: 650px) {
+            .container {
+                max-width: 1100px;
+                padding: 25px;
+            }
+            .layout-wrapper {
+                flex-direction: row; /* دابەشکرن بۆ ڕاست و چەپ */
+                align-items: flex-start;
+                gap: 30px;
+            }
+            .main-game-section {
+                flex: 1.5; /* پتر جهی دگریت بۆ بۆردی و شاشێ */
+            }
+            .players-section {
+                flex: 1;
+                background: rgba(0, 0, 0, 0.25);
+                padding: 20px;
+                border-radius: 15px;
+                border: 1px solid var(--card-border);
+            }
+            .divider-hr {
+                display: none; /* هێلا نیڤەکێ بەرزە دکەین چونکە دابەش بوون */
+            }
+            .players-list {
+                max-height: 55vh; /* درێژیا وێ دێ هێتە کۆنترۆلکرن */
+                overflow-y: auto; /* ئەگەر یاریزان گەلەک بن، دێ ب خۆ سکڕۆل بیت */
+                padding-left: 10px;
+            }
+            
+            /* ستایلا سکڕۆلێ بۆ نیڤا چەپێ */
+            .players-list::-webkit-scrollbar { width: 6px; }
+            .players-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+            .players-list::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
+        }
+
+        /* بۆ شاشەیێن گەلەک بچویک (Mobile Portrait) */
+        @media (max-width: 450px) {
+            .bingo-board { gap: 3px; padding: 10px; }
+            .board-cell { font-size: 12px; padding: 6px 0; }
+            #drawnNumberDisplay { width: 100px; height: 100px; line-height: 100px; font-size: 4em; }
+            .buttons-row { flex-direction: column; }
+            .match-text { font-size: 18px; }
+            .celebration-toast { font-size: 1.5em; padding: 20px; width: 85%; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="lang-selector">
-        <select id="langSelect" onchange="changeLanguage()">
-            <option value="badini">بادینى</option>
-            <option value="sorani">سۆرانی</option>
-            <option value="ar">العربية</option>
-            <option value="fa">فارسی</option>
-            <option value="en">English</option>
-        </select>
-    </div>
+    <div class="celebration-toast" id="celebrationToast"></div>
 
-    <div class="login-box" id="signInBox">
-        <h2 id="si-title">SIGN IN</h2>
-        <form onsubmit="handleSignIn(event)">
-            <div class="input-group">
-                <input type="text" id="si-user" required>
-                <label id="si-label-user">Username</label>
-            </div>
-            <div class="input-group">
-                <input type="password" id="si-pass" required>
-                <label id="si-label-pass">Password</label>
-            </div>
-            <p class="error" id="si-error"></p>
-            <button type="submit" class="login-btn" id="si-btn">Sign In</button>
-        </form>
-        <p class="switch-form" onclick="toggleForm()" id="si-switch">Create Account</p>
-    </div>
-
-    <div class="login-box hidden" id="signUpBox">
-        <h2 id="su-title">SIGN UP</h2>
-        <form onsubmit="handleSignUp(event)">
-            <div class="input-group">
-                <input type="text" id="su-user" required>
-                <label id="su-label-user">New Username</label>
-            </div>
-            <div class="input-group">
-                <input type="password" id="su-pass" required>
-                <label id="su-label-pass">New Password</label>
-            </div>
-            <div class="input-group">
-                <select id="su-role">
-                    <option value="cashier" id="opt-cashier">Cashier</option>
-                    <option value="admin" id="opt-admin">Administrator</option>
-                </select>
-            </div>
+    <div class="container">
+        
+        <div class="match-display" id="matchDisplay">
+            <div class="match-text" id="matchText">چاڤەڕێی ڕاکێشانێ یە...</div>
+        </div>
+        
+        <div class="layout-wrapper">
             
-            <div class="otp-header">
-                <label class="otp-label" id="su-label-code">6-Digit Code</label>
-                <button type="button" class="buy-btn" id="buy-code-btn" onclick="openWhatsApp()">
-                    کڕینا کۆدی
-                </button>
+            <div class="main-game-section">
+                <div class="monitor-box">
+                    <div id="drawnNumberDisplay">00</div>
+                </div>
+
+                <div class="bingo-board" id="bingoBoard"></div>
+
+                <div class="speed-control">
+                    <label for="speedInput">لەزاتیا یاریێ (سانیە):</label>
+                    <input type="number" id="speedInput" min="1" max="30" value="3">
+                </div>
+
+                <div class="buttons-row">
+                    <button class="btn-modern btn-draw" onclick="drawNumber()">ڕاکێشان (١ جار)</button>
+                    <button class="btn-modern btn-auto" id="autoBtn" onclick="toggleAutoDraw()">ستارت (Start)</button>
+                </div>
             </div>
 
-            <div class="otp-container">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 0)" onkeydown="moveBack(event, 0)">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 1)" onkeydown="moveBack(event, 1)">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)" onkeydown="moveBack(event, 2)">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)" onkeydown="moveBack(event, 3)">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)" onkeydown="moveBack(event, 4)">
-                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 5)" onkeydown="moveBack(event, 5)">
+            <hr class="divider-hr">
+
+            <div class="players-section">
+                <div class="input-group">
+                    <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
+                    <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 13, 5, 94)">
+                    <button class="btn-add" onclick="addPlayer()">+ یاریزانی زێدەبکە</button>
+                </div>
+                
+                <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
+
+                <div class="players-list" id="playersList"></div>
             </div>
 
-            <p class="error" id="su-error"></p>
-            <button type="submit" class="login-btn" id="su-btn">Register</button>
-        </form>
-        <p class="switch-form" onclick="toggleForm()" id="su-switch">Back to Login</p>
+        </div>
+    </div>
+
+    <div class="winner-modal" id="winnerModal">
+        <div class="loser-text" id="loserText"></div>
+        <button class="btn-restart" onclick="resetGame()">یارییەکا نوی دەستپێبکە (هەمان یاریزانان)</button>
     </div>
 
     <script>
-        const cashierCodes = ["993596", "276914", "908792", "251911", "126012", "596871", "732343", "701500", "487213"];
-        const adminCodes = ["857626", "705446", "736741", "754549", "739260", "700832", "731720", "757148", "715093", "746958"];
+        let players = [];
+        let drawnNumbers = [];
+        let autoInterval = null;
+        let isAutoPlaying = false;
+        let audioCtx;
+        let celebrationTimeout; 
 
-        const translations = {
-            badini: { 
-                siTitle: "چوونەژوورێ", suTitle: "تۆمارکرن", user: "ناڤێ بکارئینەری", pass: "کۆدا نهێنی", 
-                siBtn: "داخلبوون", suBtn: "تۆمارکرن", switchSu: "حیسابەکا نوی چێکە", switchSi: "زڤڕین بۆ داخلبوونێ", 
-                roleC: "کاشێر", roleA: "ئەدمین", code: "کۆدێ چالاککرنێ (٦ ژمارە)", error: "کۆد یان زانیاری شێلۆنە", buyCode: "کڕینا کۆدی",
-                waMsg: "سڵاف، دێ شێم کۆدەکێ چالاککرنا سیستەمی کڕم؟"
-            },
-            sorani: { 
-                siTitle: "چوونەژوورەوە", suTitle: "خۆتۆمارکردن", user: "ناوی بەکارهێنەر", pass: "وشەی نهێنی", 
-                siBtn: "چوونەژوورەوە", suBtn: "تۆمارکردن", switchSu: "هەژمارێکی نوێ دروست بکە", switchSi: "گەڕانەوە بۆ چوونەژوورەوە", 
-                roleC: "کاشێر", roleA: "بەڕێوەبەر", code: "کۆدی چالاککردن (٦ ژمارە)", error: "کۆدەکە یان زانیارییەکان هەڵەن", buyCode: "کڕینی کۆد",
-                waMsg: "سڵاو، دەتوانم کۆدێکی چالاککردنی سیستم بکڕم؟"
-            },
-            ar: { 
-                siTitle: "تسجيل الدخول", suTitle: "إنشاء حساب", user: "اسم المستخدم", pass: "كلمة المرور", 
-                siBtn: "دخول", suBtn: "تسجيل", switchSu: "إنشاء حساب جديد", switchSi: "العودة للدخول", 
-                roleC: "كاشير", roleA: "مدير", code: "رمز التفعيل (6 أرقام)", error: "الرمز أو البيانات خاطئة", buyCode: "شراء الرمز",
-                waMsg: "مرحباً، هل يمكنني شراء كود تفعيل النظام؟"
-            },
-            fa: { 
-                siTitle: "ورود به سیستم", suTitle: "ثبت نام", user: "نام کاربری", pass: "رمز عبور", 
-                siBtn: "ورود", suBtn: "ثبت نام", switchSu: "ایجاد حساب جدید", switchSi: "بازگشت به ورود", 
-                roleC: "صندوقدار", roleA: "مدیر", code: "کد فعال‌سازی (۶ رقم)", error: "کد یا اطلاعات اشتباه است", buyCode: "خرید کد",
-                waMsg: "سلام، آیا می‌توانم کد فعال‌سازی سیستم را خریداری کنم؟"
-            },
-            en: { 
-                siTitle: "SIGN IN", suTitle: "SIGN UP", user: "Username", pass: "Password", 
-                siBtn: "Login", suBtn: "Register", switchSu: "Create new account", switchSi: "Back to Login", 
-                roleC: "Cashier", roleA: "Admin", code: "Activation Code (6 digits)", error: "Invalid Code or Data", buyCode: "Buy Code",
-                waMsg: "Hello, can I purchase a system activation code?"
-            }
+        window.onload = function() {
+            initBoard();
+            loadGameState(); 
         };
 
-        function moveToNext(input, index) {
-            if (input.value.length === 1 && index < 5) {
-                document.querySelectorAll('.otp-input')[index + 1].focus();
+        function saveGameState() {
+            localStorage.setItem('bingoPlayers', JSON.stringify(players));
+            localStorage.setItem('bingoDrawn', JSON.stringify(drawnNumbers));
+        }
+
+        function loadGameState() {
+            const savedPlayers = localStorage.getItem('bingoPlayers');
+            const savedDrawn = localStorage.getItem('bingoDrawn');
+
+            if (savedPlayers) { players = JSON.parse(savedPlayers); }
+            if (savedDrawn) { drawnNumbers = JSON.parse(savedDrawn); }
+
+            renderPlayers();
+
+            if (drawnNumbers.length > 0) {
+                drawnNumbers.forEach(n => {
+                    const cell = document.getElementById('cell-' + n);
+                    if (cell) cell.classList.add('drawn');
+                });
+                const last = drawnNumbers[drawnNumbers.length - 1];
+                document.getElementById('drawnNumberDisplay').innerText = last < 10 ? '0' + last : last;
             }
         }
 
-        function moveBack(event, index) {
-            if (event.key === "Backspace" && index > 0 && event.target.value === "") {
-                document.querySelectorAll('.otp-input')[index - 1].focus();
+        function playSound(type) {
+            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'draw') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'safe') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 1.5);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+                osc.start(); osc.stop(audioCtx.currentTime + 1.5);
             }
         }
 
-        function getFullCode() {
-            let code = "";
-            document.querySelectorAll('.otp-input').forEach(input => {
-                code += input.value;
-            });
-            return code;
+        function initBoard() {
+            const board = document.getElementById('bingoBoard');
+            board.innerHTML = '';
+            for(let i = 0; i <= 99; i++) {
+                let cell = document.createElement('div');
+                cell.className = 'board-cell';
+                cell.id = 'cell-' + i;
+                cell.innerText = i;
+                board.appendChild(cell);
+            }
         }
 
-        function openWhatsApp() {
-            const lang = document.getElementById('langSelect').value;
-            const message = encodeURIComponent(translations[lang].waMsg);
-            const phoneNumber = "9647503644666";
-            window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
-        }
+        function addPlayer() {
+            const nameInput = document.getElementById('playerName');
+            const numsInput = document.getElementById('playerNumbers');
+            const name = nameInput.value.trim();
+            const numsStr = numsInput.value.trim();
 
-        function changeLanguage() {
-            const lang = document.getElementById('langSelect').value;
-            const t = translations[lang];
-            
-            document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
-            
-            document.getElementById('si-title').innerText = t.siTitle;
-            document.getElementById('su-title').innerText = t.suTitle;
-            document.getElementById('si-label-user').innerText = t.user;
-            document.getElementById('su-label-user').innerText = t.user;
-            document.getElementById('si-label-pass').innerText = t.pass;
-            document.getElementById('su-label-pass').innerText = t.pass;
-            document.getElementById('si-btn').innerText = t.siBtn;
-            document.getElementById('su-btn').innerText = t.suBtn;
-            document.getElementById('si-switch').innerText = t.switchSu;
-            document.getElementById('su-switch').innerText = t.switchSi;
-            document.getElementById('su-label-code').innerText = t.code;
-            document.getElementById('opt-cashier').innerText = t.roleC;
-            document.getElementById('opt-admin').innerText = t.roleA;
-            document.getElementById('buy-code-btn').innerText = t.buyCode;
-        }
+            if(!name || !numsStr) { alert('هیڤییە ناڤ و ژماران ب دروستی داخل بکە!'); return; }
+            const numbers = numsStr.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+            if(numbers.length === 0) { alert('هیڤییە ژمارەیێن دروست بنڤیسە!'); return; }
 
-        function toggleForm() {
-            document.getElementById('signInBox').classList.toggle('hidden');
-            document.getElementById('signUpBox').classList.toggle('hidden');
-            document.getElementById('si-error').innerText = "";
-            document.getElementById('su-error').innerText = "";
-            document.querySelectorAll('.otp-input').forEach(input => input.value = "");
-        }
-
-        function handleSignUp(e) {
-            e.preventDefault();
-            const user = document.getElementById('su-user').value;
-            const pass = document.getElementById('su-pass').value;
-            const role = document.getElementById('su-role').value;
-            const code = getFullCode();
-            const errorEl = document.getElementById('su-error');
-            const lang = document.getElementById('langSelect').value;
-
-            if(code.length < 6) {
-                errorEl.innerText = (lang === 'en') ? "Please enter 6 digits" : "هیڤیە ٦ ژمارا داخل بکە";
+            const uniqueNumbers = [...new Set(numbers)];
+            if (uniqueNumbers.length !== numbers.length) {
+                alert('تە ژمارەیەک دوو جاران یا نڤیسی. هیڤییە ژمارەیێن دووبارە ڕابکە!');
                 return;
             }
 
-            let isValid = false;
-            if (role === 'cashier' && cashierCodes.includes(code)) isValid = true;
-            if (role === 'admin' && adminCodes.includes(code)) isValid = true;
+            let allUsedNumbers = [];
+            players.forEach(p => { allUsedNumbers = allUsedNumbers.concat(p.numbers); });
+            let duplicateFound = numbers.find(n => allUsedNumbers.includes(n));
+            
+            if (duplicateFound !== undefined) {
+                alert(`لێبۆڕینێ دخوازم، ژمارە (${duplicateFound}) پێشتر ژ لایێ کەسەکێ دی ڤە هاتییە هەلبژارتن!\nهیڤییە ژمارەیەکا دی بنڤیسە.`);
+                return;
+            }
 
-            if (isValid) {
-                let users = JSON.parse(localStorage.getItem('system_users') || '[]');
-                if(users.find(u => u.user === user)) {
-                    errorEl.innerText = (lang === 'en') ? "User already exists!" : "ئەڤ ناڤە یێ هەی!";
-                    return;
+            players.push({ id: Date.now(), name: name, numbers: numbers, isSafe: false });
+            nameInput.value = ''; numsInput.value = '';
+            saveGameState(); 
+            renderPlayers();
+        }
+
+        function editPlayer(id) {
+            const playerIndex = players.findIndex(p => p.id === id);
+            if(playerIndex > -1) {
+                const p = players[playerIndex];
+                document.getElementById('playerName').value = p.name;
+                document.getElementById('playerNumbers').value = p.numbers.join(', ');
+                players.splice(playerIndex, 1);
+                saveGameState(); 
+                renderPlayers();
+            }
+        }
+
+        function clearAllPlayers() {
+            if (players.length === 0) return;
+            if (confirm("ئایا تو یێ پشتڕاستی دڤێت هەمی یاریزانان ڕەش بکەی؟")) {
+                players = [];
+                drawnNumbers = [];
+                saveGameState();
+                document.getElementById('drawnNumberDisplay').innerText = '00';
+                document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
+                document.getElementById('matchText').classList.remove('hit');
+                initBoard(); 
+                renderPlayers();
+            }
+        }
+
+        function renderPlayers() {
+            const list = document.getElementById('playersList');
+            list.innerHTML = '';
+            players.forEach(p => {
+                const card = document.createElement('div');
+                card.className = `player-card ${p.isSafe ? 'safe' : ''}`;
+                let numsHtml = p.numbers.map(n => {
+                    let isMatched = drawnNumbers.includes(n) ? 'matched' : '';
+                    return `<span class="number-circle ${isMatched}">${n}</span>`;
+                }).join('');
+                card.innerHTML = `
+                    <div class="player-info">
+                        <div class="player-name">
+                            <span>${p.name} ${p.isSafe ? '<span class="safe-badge">(قورتال بوو)</span>' : ''}</span>
+                            ${!p.isSafe && drawnNumbers.length === 0 ? `<button class="btn-edit" onclick="editPlayer(${p.id})">دەستکاری</button>` : ''}
+                        </div>
+                        <div style="margin-top:10px;">${numsHtml}</div>
+                    </div>`;
+                list.appendChild(card);
+            });
+        }
+
+        function toggleAutoDraw() {
+            if (players.length < 2) { alert('ب لایەنی ڤە پێدڤییە ٢ یاریزان هەبن بۆ ڤێ یاریێ!'); return; }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const btn = document.getElementById('autoBtn');
+            const speedInput = document.getElementById('speedInput');
+            
+            if (isAutoPlaying) {
+                stopAutoMode();
+            } else {
+                let speedSeconds = parseInt(speedInput.value);
+                if (isNaN(speedSeconds) || speedSeconds < 1) speedSeconds = 1;
+                if (speedSeconds > 30) speedSeconds = 30;
+                speedInput.value = speedSeconds; 
+                
+                isAutoPlaying = true;
+                btn.innerText = "پاوس (Pause)";
+                btn.classList.add('stop-mode');
+                speedInput.disabled = true; 
+                
+                drawNumber(); 
+                autoInterval = setInterval(drawNumber, speedSeconds * 1000); 
+            }
+        }
+
+        function stopAutoMode() {
+            isAutoPlaying = false;
+            clearInterval(autoInterval);
+            const btn = document.getElementById('autoBtn');
+            const speedInput = document.getElementById('speedInput');
+            btn.innerText = "ستارت (Start)";
+            btn.classList.remove('stop-mode');
+            speedInput.disabled = false; 
+        }
+
+        function showCelebration(namesArray) {
+            const toast = document.getElementById('celebrationToast');
+            toast.innerHTML = `🎉 پیرۆزە 🎉<br><span class="winner-name">${namesArray.join(' و ')}</span>تو بسەرکەفتی!`;
+            toast.classList.add('show');
+            
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, zIndex: 3000 });
+            
+            clearTimeout(celebrationTimeout);
+            celebrationTimeout = setTimeout(() => { toast.classList.remove('show'); }, 3500); 
+        }
+
+        function drawNumber() {
+            if (drawnNumbers.length >= 100) { stopAutoMode(); alert('هەمی ژمارە دەرکەفتن!'); return; }
+
+            let drawn;
+            do { drawn = Math.floor(Math.random() * 100); } while (drawnNumbers.includes(drawn));
+            drawnNumbers.push(drawn);
+            playSound('draw');
+            saveGameState(); 
+
+            const display = document.getElementById('drawnNumberDisplay');
+            display.innerText = drawn < 10 ? '0' + drawn : drawn; 
+            display.classList.remove('pop-animation');
+            void display.offsetWidth; 
+            display.classList.add('pop-animation');
+
+            document.getElementById('cell-' + drawn).classList.add('drawn');
+            
+            let hitPlayers = [];
+            players.forEach(p => { if (p.numbers.includes(drawn)) { hitPlayers.push(p.name); } });
+
+            const matchText = document.getElementById('matchText');
+            if (hitPlayers.length > 0) {
+                matchText.innerHTML = `ژمارە <span class="highlight-num">${drawn}</span> بۆ: ${hitPlayers.join(' و ')}`;
+                matchText.classList.add('hit');
+                setTimeout(() => { matchText.classList.remove('hit'); }, 1000);
+            } else {
+                matchText.innerHTML = `ژمارە <span class="highlight-num">${drawn}</span> دەرکەفت!<br><span style="font-size: 0.75em; color: #b0bec5; font-weight: normal;">(یا چ کەسان نینە)</span>`;
+                matchText.classList.remove('hit');
+            }
+            
+            checkWinner();
+            renderPlayers(); 
+        }
+
+        function checkWinner() {
+            if(players.length < 2) return;
+            
+            let newlySafePlayers = [];
+
+            players.forEach(p => {
+                if (!p.isSafe) {
+                    let allMatched = p.numbers.every(n => drawnNumbers.includes(n));
+                    if (allMatched) { p.isSafe = true; newlySafePlayers.push(p.name); }
                 }
-                users.push({ user, pass, role });
-                localStorage.setItem('system_users', JSON.stringify(users));
-                alert((lang === 'en') ? "Success! Account created." : "تەحیر! حیساب هاتە چێکرن.");
-                toggleForm();
-            } else {
-                errorEl.innerText = translations[lang].error;
+            });
+
+            if (newlySafePlayers.length > 0) {
+                playSound('safe'); 
+                showCelebration(newlySafePlayers); 
+                saveGameState(); 
+            }
+
+            let remainingPlayers = players.filter(p => !p.isSafe);
+
+            if (remainingPlayers.length === 1 && players.length > 1) {
+                stopAutoMode(); 
+                playSound('lose'); 
+                const loser = remainingPlayers[0];
+                document.getElementById('loserText').innerHTML = `خوسارەت!<br><span>${loser.name}</span>`;
+                document.getElementById('winnerModal').style.display = 'flex';
+            } else if (remainingPlayers.length === 0 && players.length > 1) {
+                stopAutoMode();
+                document.getElementById('loserText').innerHTML = `یاری ب دوماهیک هات!<br><span style="color:var(--neon-blue); font-size: 0.5em; -webkit-text-stroke: 0; text-shadow:none;">چ خوسارەت نینن</span>`;
+                document.getElementById('winnerModal').style.display = 'flex';
             }
         }
 
-        function handleSignIn(e) {
-            e.preventDefault();
-            const user = document.getElementById('si-user').value;
-            const pass = document.getElementById('si-pass').value;
-            const lang = document.getElementById('langSelect').value;
-            const users = JSON.parse(localStorage.getItem('system_users') || '[]');
-            const found = users.find(u => u.user === user && u.pass === pass);
-            if (found) {
-                alert(`${translations[lang].siTitle}: ${found.user}`);
-            } else {
-                document.getElementById('si-error').innerText = translations[lang].error;
-            }
-        }
+        function resetGame() {
+            stopAutoMode();
+            drawnNumbers = []; 
+            players.forEach(p => p.isSafe = false); 
+            saveGameState(); 
 
-        changeLanguage();
+            clearTimeout(celebrationTimeout);
+            document.getElementById('celebrationToast').classList.remove('show');
+            document.getElementById('drawnNumberDisplay').innerText = '00';
+            document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
+            document.getElementById('matchText').classList.remove('hit');
+            document.getElementById('winnerModal').style.display = 'none';
+            initBoard(); 
+            renderPlayers();
+        }
     </script>
 </body>
 </html>
