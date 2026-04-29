@@ -242,6 +242,12 @@
             border-color: #999;
             color: #333;
         }
+        /* دوگمەیا ڕاوەستیای دەمێ یاری دەستپێدکەت */
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
         
         .menu-panel {
             display: none;
@@ -348,7 +354,6 @@
             cursor: pointer;
             font-weight: bold;
         }
-        /* ستایلا دوگما دیلێت یا نوی */
         .btn-delete-table {
             background: #f44336;
             color: #fff;
@@ -692,14 +697,14 @@
                             <button class="btn-sound" id="soundBtn" onclick="toggleSoundMode()">🔊 دەنگ + خواندن</button>
                         </div>
 
-                        <button class="menu-btn-item" onclick="toggleSubMenu('addPlayerPanel')">➕ زێدەکرنا یاریزانان</button>
+                        <button class="menu-btn-item" id="addPlayerMenuBtn" onclick="toggleSubMenu('addPlayerPanel')">➕ زێدەکرنا یاریزانان</button>
                         <div id="addPlayerPanel" class="menu-panel">
                             <div class="input-group">
                                 <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
                                 <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 13, 5, 94)">
-                                <button class="btn-add" onclick="addPlayer()">Change (زێدەبکە)</button>
+                                <button class="btn-add" id="btnAddPlayer" onclick="addPlayer()">Change (زێدەبکە)</button>
                             </div>
-                            <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
+                            <button class="btn-clear-all" id="btnClearAll" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
                         </div>
                         
                         <button class="menu-btn-item" onclick="toggleSubMenu('alertsPanel')">🔔 کۆنترۆلا نامەیان (ئەلێرت)</button>
@@ -747,14 +752,43 @@
             lose: true
         };
 
-        // گۆڕاو بۆ سکرۆل و ژێبرنا ب تبلێ (Swipe)
         let touchstartX = 0;
         let touchstartY = 0;
 
         window.onload = function() {
             initBoard();
             loadGameState(); 
+            updateMenuState(); // سەحکرن بۆ قوفلکرنێ دەمێ لۆد دبیت
         };
+
+        // فەنکشن بۆ قوفلکرن/ڤەکرنا دوگمەیێن زێدەکرن و ڕەشکرنێ ل دویڤ ڕەوشا یاریێ
+        function updateMenuState() {
+            const isGameStarted = drawnNumbers.length > 0;
+            const addPlayerMenuBtn = document.getElementById('addPlayerMenuBtn');
+            const btnAddPlayer = document.getElementById('btnAddPlayer');
+            const btnClearAll = document.getElementById('btnClearAll');
+            const playerNameInput = document.getElementById('playerName');
+            const playerNumbersInput = document.getElementById('playerNumbers');
+
+            if (isGameStarted) {
+                // ئەگەر یاری دەستپێکر، دوگمەیان قوفل بکە
+                addPlayerMenuBtn.classList.add('btn-disabled');
+                btnAddPlayer.classList.add('btn-disabled');
+                btnClearAll.classList.add('btn-disabled');
+                playerNameInput.disabled = true;
+                playerNumbersInput.disabled = true;
+                
+                // ئەگەر بەشێ زێدەکرنێ یێ ڤەکری بیت، بگرە
+                document.getElementById('addPlayerPanel').style.display = 'none';
+            } else {
+                // ئەگەر یاری یا نوی بیت، ڤەکە
+                addPlayerMenuBtn.classList.remove('btn-disabled');
+                btnAddPlayer.classList.remove('btn-disabled');
+                btnClearAll.classList.remove('btn-disabled');
+                playerNameInput.disabled = false;
+                playerNumbersInput.disabled = false;
+            }
+        }
 
         function togglePlayerMenu() {
             const menu = document.getElementById('playerMenuContent');
@@ -766,6 +800,11 @@
         }
 
         function toggleSubMenu(id) {
+            // ئەگەر یاری دەستپێکر بیت، نەهێلە بەشێ زێدەکرنێ ڤەبیت
+            if (id === 'addPlayerPanel' && drawnNumbers.length > 0) {
+                return;
+            }
+
             const panel = document.getElementById(id);
             if (panel.style.display === 'block') {
                 panel.style.display = 'none';
@@ -868,6 +907,7 @@
         function saveGameState() {
             localStorage.setItem('bingo1to99Players', JSON.stringify(players));
             localStorage.setItem('bingo1to99Drawn', JSON.stringify(drawnNumbers));
+            updateMenuState(); // پشتی هەرسێڤکرنەکێ ڕەوشێ ئەپدەیت بکە
         }
 
         function loadGameState() {
@@ -928,6 +968,8 @@
         }
 
         function addPlayer() {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+
             const nameInput = document.getElementById('playerName');
             const numsInput = document.getElementById('playerNumbers');
             const name = nameInput.value.trim();
@@ -963,6 +1005,8 @@
         }
 
         function editPlayer(id) {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+
             const playerIndex = players.findIndex(p => p.id === id);
             if(playerIndex > -1) {
                 const p = players[playerIndex];
@@ -980,6 +1024,8 @@
         }
 
         function deletePlayer(id) {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+
             const player = players.find(p => p.id === id);
             if (player) {
                 if (confirm(`ئایا تو یێ پشتڕاستی دڤێت یاریزان "${player.name}" ژێ ببەی؟`)) {
@@ -991,6 +1037,8 @@
         }
 
         function clearAllPlayers() {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+
             if (players.length === 0) return;
             if (confirm("ئایا تو یێ پشتڕاستی دڤێت هەمی یاریزانان ڕەش بکەی؟")) {
                 players = [];
@@ -1007,11 +1055,14 @@
         }
 
         function handleTouchStart(event) {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە Swipe ڕابگرە
             touchstartX = event.changedTouches[0].screenX;
             touchstartY = event.changedTouches[0].screenY;
         }
 
         function handleTouchEnd(event, id) {
+            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە Swipe ڕابگرە
+            
             let touchendX = event.changedTouches[0].screenX;
             let touchendY = event.changedTouches[0].screenY;
             
@@ -1025,6 +1076,7 @@
 
         function renderPlayers() {
             const list = document.getElementById('playersList');
+            const isGameStarted = drawnNumbers.length > 0;
             
             if (players.length === 0) {
                 list.innerHTML = '';
@@ -1037,7 +1089,7 @@
                         <tr>
                             <th style="width: 25%;">ناڤ</th>
                             <th style="width: 55%;">ژمارە</th>
-                            <th style="width: 20%;">دەستکاری</th>
+                            ${!isGameStarted ? `<th style="width: 20%;">دەستکاری</th>` : ''}
                         </tr>
                     </thead>
                     <tbody>
@@ -1052,18 +1104,20 @@
                 let rowClass = p.isSafe ? 'safe' : '';
                 let safeText = p.isSafe ? '<br><span class="safe-badge">(قورتال بوو)</span>' : '';
                 
-                let actionHtml = `<div style="display:flex; gap:4px; justify-content:center; align-items:center;">`;
-                if (!p.isSafe && drawnNumbers.length === 0) {
-                    actionHtml += `<button class="btn-edit-table" onclick="editPlayer(${p.id})">دەستکاری</button>`;
+                // ڤەشارتنا دوگمەیێن دەستکاریێ ئەگەر یاری دەستپێکر بیت
+                let actionColumnHtml = '';
+                if (!isGameStarted) {
+                    actionColumnHtml = `<td><div style="display:flex; gap:4px; justify-content:center; align-items:center;">`;
+                    actionColumnHtml += `<button class="btn-edit-table" onclick="editPlayer(${p.id})">دەستکاری</button>`;
+                    actionColumnHtml += `<button class="btn-delete-table" onclick="deletePlayer(${p.id})">🗑️</button>`;
+                    actionColumnHtml += `</div></td>`;
                 }
-                actionHtml += `<button class="btn-delete-table" onclick="deletePlayer(${p.id})">🗑️</button>`;
-                actionHtml += `</div>`;
 
                 tableHTML += `
                     <tr class="${rowClass}" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event, ${p.id})">
                         <td><strong>${p.name}</strong>${safeText}</td>
                         <td>${numsHtml}</td>
-                        <td>${actionHtml}</td>
+                        ${actionColumnHtml}
                     </tr>
                 `;
             });
@@ -1208,6 +1262,7 @@
             }
         }
 
+        // چارەسەرکرنا خەلەتییا ڕیسێت نەبوونا بۆردێ
         function resetGame() {
             if (drawnNumbers.length === 0) {
                 document.getElementById('winnerModal').style.display = 'none';
@@ -1223,12 +1278,16 @@
                 clearTimeout(celebrationTimeout);
                 document.getElementById('celebrationToast').classList.remove('show');
                 document.getElementById('drawnNumberDisplay').innerText = '--';
+                
                 if (alertsEnabled.draw) {
                     document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
                     document.getElementById('matchText').classList.remove('hit');
                 }
                 document.getElementById('winnerModal').style.display = 'none';
+                
+                // ئەڤە گرنگە بۆ پاقژکرنا بۆردێ: جارەکا دی بۆردی ژ نوی چێدکەت و ڕەنگێ زەرد (drawn) ژێ دبەت
                 initBoard(); 
+                
                 renderPlayers();
             }
         }
