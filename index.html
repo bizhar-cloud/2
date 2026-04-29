@@ -202,7 +202,7 @@
         
         .players-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; overflow: hidden; }
         
-        /* ستایلا مینیۆیێ */
+        /* ستایلا مینیۆیێ دگەل سکرۆلێ */
         .player-menu-content {
             display: none; 
             background: #fce883;
@@ -285,6 +285,7 @@
             width: 100%;
         }
 
+        /* ستایلا دوگمەیێن کۆنترۆلا ئەلێرتان */
         .toggle-btn {
             background: #4caf50;
             color: white;
@@ -338,9 +339,18 @@
         .players-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        /* --- ڕەنگێ قورتالبووی (کەسک) --- */
         .players-table tr.safe {
             background-color: #90ee90 !important;
         }
+        /* --- ڕەنگێ خوسارەتی (سۆر) و جوانکرنا وێ --- */
+        .players-table tr.loser {
+            background-color: #ff4d4d !important;
+        }
+        .players-table tr.loser td, .players-table tr.loser strong {
+            color: #fff !important;
+        }
+        
         .btn-edit-table {
             background: #ffd700;
             color: #000;
@@ -362,6 +372,7 @@
             font-weight: bold;
         }
         .safe-badge { color: #006400; font-size: 11px; font-weight: bold;}
+        .loser-badge { color: #ffcccc; font-size: 11px; font-weight: bold;}
 
         /* ----- ستایلا بەشێ ڕاستێ (بۆرد) ----- */
         .bingo-board {
@@ -419,7 +430,7 @@
         .loser-text span { color: #fff; font-size: 1.2em; }
         .btn-restart { background: linear-gradient(to bottom, #d4d4d4, #7a7a7a); color: white; padding: 15px 40px; font-size: 20px; font-weight: 900; border: 2px solid #555; border-radius: 10px; cursor: pointer; text-shadow: 1px 1px 2px #000; }
 
-        /* --- ستایلا نوی و جوان بۆ مۆدالێ دەربارەی گەشەپێدەر --- */
+        /* ستایلا مۆدالێ دەربارەی گەشەپێدەر */
         @keyframes fadeInBackground { from { opacity: 0; } to { opacity: 1; } }
         @keyframes popUpBox { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -427,8 +438,8 @@
             display: none; 
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.5); /* ڕەشاتیەکا کێمتر */
-            backdrop-filter: blur(5px); /* لێلکرنا پشتپەردەیێ - تایبەتمەندیا نوی و جوان */
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(5px); 
             -webkit-backdrop-filter: blur(5px);
             justify-content: center; align-items: center; z-index: 3000;
             padding: 20px;
@@ -760,6 +771,12 @@
         </div>
     </div>
 
+    <div class="winner-modal" id="winnerModal">
+        <div class="loser-text" id="loserText"></div>
+        <button class="btn-restart" onclick="resetGame()">🔄 یارییەکا نوی دەستپێبکە</button>
+        <button class="btn-restart" style="background: linear-gradient(to bottom, #777, #444); margin-top: 15px; padding: 10px 30px; font-size: 18px;" onclick="document.getElementById('winnerModal').style.display = 'none';">👀 دیتنا ئەنجامی</button>
+    </div>
+
     <script>
         let players = [];
         let drawnNumbers = [];
@@ -861,7 +878,6 @@
             }
         }
 
-        // فەنکشن بۆ ڤەکرنا مۆدالێ ب دیزاینا نوی
         function showAboutDeveloper() {
             document.getElementById('aboutModal').style.display = 'flex';
             document.getElementById('playerMenuContent').style.display = 'none';
@@ -1015,7 +1031,7 @@
                 return;
             }
 
-            players.push({ id: Date.now(), name: name, numbers: numbers, isSafe: false });
+            players.push({ id: Date.now(), name: name, numbers: numbers, isSafe: false, isLoser: false });
             nameInput.value = ''; numsInput.value = '';
             saveGameState(); 
             renderPlayers();
@@ -1064,8 +1080,10 @@
                 drawnNumbers = [];
                 saveGameState();
                 document.getElementById('drawnNumberDisplay').innerText = '--';
-                document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
-                document.getElementById('matchText').classList.remove('hit');
+                if (alertsEnabled.draw) {
+                    document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
+                    document.getElementById('matchText').classList.remove('hit');
+                }
                 initBoard(); 
                 renderPlayers();
                 
@@ -1120,8 +1138,8 @@
                     return `<span class="number-circle ${isMatched}">${n}</span>`;
                 }).join('');
 
-                let rowClass = p.isSafe ? 'safe' : '';
-                let safeText = p.isSafe ? '<br><span class="safe-badge">(قورتال بوو)</span>' : '';
+                let rowClass = p.isSafe ? 'safe' : (p.isLoser ? 'loser' : '');
+                let safeText = p.isSafe ? '<br><span class="safe-badge">(قورتال بوو)</span>' : (p.isLoser ? '<br><span class="loser-badge">(خوسارەت)</span>' : '');
                 
                 let actionColumnHtml = '';
                 if (!isGameStarted) {
@@ -1251,7 +1269,11 @@
             players.forEach(p => {
                 if (!p.isSafe) {
                     let allMatched = p.numbers.every(n => drawnNumbers.includes(n));
-                    if (allMatched) { p.isSafe = true; newlySafePlayers.push(p.name); }
+                    if (allMatched) { 
+                        p.isSafe = true; 
+                        p.isLoser = false; 
+                        newlySafePlayers.push(p.name); 
+                    }
                 }
             });
 
@@ -1266,15 +1288,18 @@
             if (remainingPlayers.length === 1 && players.length > 1) {
                 stopAutoMode(); 
                 playSound('lose'); 
+                const loser = remainingPlayers[0];
+                loser.isLoser = true; // دەستنیشانکرنا خوسارەتی بۆ ڕەنگێ سۆر
+                saveGameState();
+                
                 if (alertsEnabled.lose) {
-                    const loser = remainingPlayers[0];
                     document.getElementById('loserText').innerHTML = `خوسارەت!<br><span>${loser.name}</span>`;
                     document.getElementById('winnerModal').style.display = 'flex';
                 }
             } else if (remainingPlayers.length === 0 && players.length > 1) {
                 stopAutoMode();
                 if (alertsEnabled.lose) {
-                    document.getElementById('loserText').innerHTML = `یاری ب دوماهیک هات!<br><span style="color:var(--neon-blue); font-size: 0.5em; -webkit-text-stroke: 0; text-shadow:none;">چ خوسارەت نینن</span>`;
+                    document.getElementById('loserText').innerHTML = `یاری ب دوماهیک هات!<br><span style="color:var(--col-b); font-size: 0.5em; -webkit-text-stroke: 0; text-shadow:none;">چ خوسارەت نینن</span>`;
                     document.getElementById('winnerModal').style.display = 'flex';
                 }
             }
@@ -1289,7 +1314,10 @@
             if (confirm("ئایا تو دڤێتی یاریێ ژ نوی دەستپێبکەی؟\n(ژمارەیێن دەرکەفتی دێ هێنە ڕەشکرن، بەلێ یاریزان دێ مینن)")) {
                 stopAutoMode();
                 drawnNumbers = []; 
-                players.forEach(p => p.isSafe = false); 
+                players.forEach(p => { 
+                    p.isSafe = false; 
+                    p.isLoser = false; // پاقژکرنا ڕەنگێ سۆر
+                }); 
                 saveGameState(); 
 
                 clearTimeout(celebrationTimeout);
