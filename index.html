@@ -202,7 +202,7 @@
         
         .players-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; overflow: hidden; }
         
-        /* ستایلا مینیۆیێ دگەل سکرۆلێ */
+        /* ستایلا مینیۆیێ */
         .player-menu-content {
             display: none; 
             background: #fce883;
@@ -216,7 +216,6 @@
             flex-shrink: 0;
         }
 
-        /* ستایلا دوگمەیێن ناڤ مینیۆیێ */
         .menu-btn-item {
             background: #e6c200;
             border: 2px solid #b8860b;
@@ -242,7 +241,6 @@
             border-color: #999;
             color: #333;
         }
-        /* دوگمەیا ڕاوەستیای دەمێ یاری دەستپێدکەت */
         .btn-disabled {
             opacity: 0.5;
             cursor: not-allowed !important;
@@ -287,7 +285,6 @@
             width: 100%;
         }
 
-        /* ستایلا دوگمەیێن کۆنترۆلا ئەلێرتان */
         .toggle-btn {
             background: #4caf50;
             color: white;
@@ -422,59 +419,82 @@
         .loser-text span { color: #fff; font-size: 1.2em; }
         .btn-restart { background: linear-gradient(to bottom, #d4d4d4, #7a7a7a); color: white; padding: 15px 40px; font-size: 20px; font-weight: 900; border: 2px solid #555; border-radius: 10px; cursor: pointer; text-shadow: 1px 1px 2px #000; }
 
-        /* ستایلا مۆدالێ دەربارەی گەشەپێدەر */
+        /* --- ستایلا نوی و جوان بۆ مۆدالێ دەربارەی گەشەپێدەر --- */
+        @keyframes fadeInBackground { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popUpBox { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
         .about-modal {
             display: none; 
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.85); 
+            background: rgba(0, 0, 0, 0.5); /* ڕەشاتیەکا کێمتر */
+            backdrop-filter: blur(5px); /* لێلکرنا پشتپەردەیێ - تایبەتمەندیا نوی و جوان */
+            -webkit-backdrop-filter: blur(5px);
             justify-content: center; align-items: center; z-index: 3000;
             padding: 20px;
             box-sizing: border-box;
+            animation: fadeInBackground 0.3s ease forwards;
         }
         .about-box {
-            background: linear-gradient(to bottom, #fce883, #cba85a);
-            border: 4px solid #8b0000;
-            padding: 25px;
-            border-radius: 12px;
-            max-width: 400px;
+            background: #fff;
+            border: 3px solid #8b0000;
+            padding: 25px 20px;
+            border-radius: 16px;
+            max-width: 350px;
+            width: 100%;
             text-align: center;
+            color: #333;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            animation: popUpBox 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .about-box h3 {
             color: #5a0000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 10px;
         }
         .about-box p {
-            margin: 10px 0;
-            font-size: 16px;
+            margin: 12px 0;
+            font-size: 15px;
             line-height: 1.6;
-            font-weight: bold;
+            color: #444;
         }
         .about-link {
             display: inline-block;
-            background: #8b0000;
-            color: #fff !important;
-            padding: 8px 20px;
-            border-radius: 8px;
+            background: linear-gradient(to right, #fce883, #cba85a);
+            color: #5a0000 !important;
+            padding: 10px 25px;
+            border-radius: 30px;
             text-decoration: none;
-            font-size: 20px;
-            margin: 15px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            border: 2px solid #5a0000;
-            transition: transform 0.2s;
+            font-size: 18px;
+            font-weight: 900;
+            margin: 10px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid #b8860b;
+            transition: all 0.2s;
         }
         .about-link:active {
             transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .btn-close-about {
-            background: #555;
+            background: #f44336;
             color: white;
-            border: 2px solid #333;
-            padding: 8px 30px;
+            border: none;
+            padding: 10px 35px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 15px;
             font-family: inherit;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .btn-close-about:active {
+            transform: scale(0.95);
         }
 
         @media (min-width: 900px) {
@@ -627,7 +647,10 @@
             }
             
             .celebration-toast { font-size: 2em; padding: 20px; width: 85%; }
-            .about-box { max-height: 90vh; overflow-y: auto; }
+            .about-box { max-height: 90vh; overflow-y: auto; padding: 15px; }
+            .about-box h3 { font-size: 16px; margin-bottom: 8px; }
+            .about-box p { font-size: 14px; margin: 8px 0; }
+            .about-link { font-size: 16px; padding: 8px 20px; margin: 8px 0; }
         }
 
         @media (max-width: 700px) and (orientation: portrait) {
@@ -645,10 +668,11 @@
 
     <div class="about-modal" id="aboutModal">
         <div class="about-box">
-            <p>ئەف یاریە هاتیە درۆست کرن ژلایێ پروگرامساز</p>
+            <h3>دەربارەی گەشەپێدەر</h3>
+            <p>ئەڤ یارییە هاتییە دروستکرن ژ لایێ پروگرامساز:</p>
             <a href="https://bizhar-cloud.github.io/BizharRasheed/" target="_blank" class="about-link">BIZHAR RASHEED</a>
-            <p style="font-size: 14px; color: #333; margin-top: 15px;">هیڤیە ڤێ یاریێ بو چ کارێن خراپ و حەرام بکارنەئینن بتنێ بو زەوق و دەمبوراندنێ بکاربینن گونەهاوە دستویێ وەدابیت 😂</p>
-            <p style="font-size: 15px; margin-top: 15px;">هیڤیا دەمێن خوش بوهەوە.</p>
+            <p>هیڤیە ڤێ یاریێ بۆ چ کارێن خراپ و حەرام بکارنەئینن، بتنێ بۆ زەوق و دەمبۆراندنێ بکاربینن گونەها هەوە د ستۆیێ هەوە دابیت 😂</p>
+            <p style="color: #8b0000; font-size: 16px;">هیڤیا دەمێن خۆش بۆ هەوە. ❤️</p>
             <button class="btn-close-about" onclick="closeAboutDeveloper()">گرتن</button>
         </div>
     </div>
@@ -758,10 +782,9 @@
         window.onload = function() {
             initBoard();
             loadGameState(); 
-            updateMenuState(); // سەحکرن بۆ قوفلکرنێ دەمێ لۆد دبیت
+            updateMenuState(); 
         };
 
-        // فەنکشن بۆ قوفلکرن/ڤەکرنا دوگمەیێن زێدەکرن و ڕەشکرنێ ل دویڤ ڕەوشا یاریێ
         function updateMenuState() {
             const isGameStarted = drawnNumbers.length > 0;
             const addPlayerMenuBtn = document.getElementById('addPlayerMenuBtn');
@@ -771,17 +794,13 @@
             const playerNumbersInput = document.getElementById('playerNumbers');
 
             if (isGameStarted) {
-                // ئەگەر یاری دەستپێکر، دوگمەیان قوفل بکە
                 addPlayerMenuBtn.classList.add('btn-disabled');
                 btnAddPlayer.classList.add('btn-disabled');
                 btnClearAll.classList.add('btn-disabled');
                 playerNameInput.disabled = true;
                 playerNumbersInput.disabled = true;
-                
-                // ئەگەر بەشێ زێدەکرنێ یێ ڤەکری بیت، بگرە
                 document.getElementById('addPlayerPanel').style.display = 'none';
             } else {
-                // ئەگەر یاری یا نوی بیت، ڤەکە
                 addPlayerMenuBtn.classList.remove('btn-disabled');
                 btnAddPlayer.classList.remove('btn-disabled');
                 btnClearAll.classList.remove('btn-disabled');
@@ -800,7 +819,6 @@
         }
 
         function toggleSubMenu(id) {
-            // ئەگەر یاری دەستپێکر بیت، نەهێلە بەشێ زێدەکرنێ ڤەبیت
             if (id === 'addPlayerPanel' && drawnNumbers.length > 0) {
                 return;
             }
@@ -843,6 +861,7 @@
             }
         }
 
+        // فەنکشن بۆ ڤەکرنا مۆدالێ ب دیزاینا نوی
         function showAboutDeveloper() {
             document.getElementById('aboutModal').style.display = 'flex';
             document.getElementById('playerMenuContent').style.display = 'none';
@@ -907,7 +926,7 @@
         function saveGameState() {
             localStorage.setItem('bingo1to99Players', JSON.stringify(players));
             localStorage.setItem('bingo1to99Drawn', JSON.stringify(drawnNumbers));
-            updateMenuState(); // پشتی هەرسێڤکرنەکێ ڕەوشێ ئەپدەیت بکە
+            updateMenuState(); 
         }
 
         function loadGameState() {
@@ -968,7 +987,7 @@
         }
 
         function addPlayer() {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+            if (drawnNumbers.length > 0) return; 
 
             const nameInput = document.getElementById('playerName');
             const numsInput = document.getElementById('playerNumbers');
@@ -1005,7 +1024,7 @@
         }
 
         function editPlayer(id) {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+            if (drawnNumbers.length > 0) return; 
 
             const playerIndex = players.findIndex(p => p.id === id);
             if(playerIndex > -1) {
@@ -1024,7 +1043,7 @@
         }
 
         function deletePlayer(id) {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+            if (drawnNumbers.length > 0) return; 
 
             const player = players.find(p => p.id === id);
             if (player) {
@@ -1037,7 +1056,7 @@
         }
 
         function clearAllPlayers() {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە نەهێلە
+            if (drawnNumbers.length > 0) return; 
 
             if (players.length === 0) return;
             if (confirm("ئایا تو یێ پشتڕاستی دڤێت هەمی یاریزانان ڕەش بکەی؟")) {
@@ -1055,13 +1074,13 @@
         }
 
         function handleTouchStart(event) {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە Swipe ڕابگرە
+            if (drawnNumbers.length > 0) return; 
             touchstartX = event.changedTouches[0].screenX;
             touchstartY = event.changedTouches[0].screenY;
         }
 
         function handleTouchEnd(event, id) {
-            if (drawnNumbers.length > 0) return; // ئەگەر یاری دەستپێکریە Swipe ڕابگرە
+            if (drawnNumbers.length > 0) return; 
             
             let touchendX = event.changedTouches[0].screenX;
             let touchendY = event.changedTouches[0].screenY;
@@ -1104,7 +1123,6 @@
                 let rowClass = p.isSafe ? 'safe' : '';
                 let safeText = p.isSafe ? '<br><span class="safe-badge">(قورتال بوو)</span>' : '';
                 
-                // ڤەشارتنا دوگمەیێن دەستکاریێ ئەگەر یاری دەستپێکر بیت
                 let actionColumnHtml = '';
                 if (!isGameStarted) {
                     actionColumnHtml = `<td><div style="display:flex; gap:4px; justify-content:center; align-items:center;">`;
@@ -1262,7 +1280,6 @@
             }
         }
 
-        // چارەسەرکرنا خەلەتییا ڕیسێت نەبوونا بۆردێ
         function resetGame() {
             if (drawnNumbers.length === 0) {
                 document.getElementById('winnerModal').style.display = 'none';
@@ -1285,7 +1302,6 @@
                 }
                 document.getElementById('winnerModal').style.display = 'none';
                 
-                // ئەڤە گرنگە بۆ پاقژکرنا بۆردێ: جارەکا دی بۆردی ژ نوی چێدکەت و ڕەنگێ زەرد (drawn) ژێ دبەت
                 initBoard(); 
                 
                 renderPlayers();
