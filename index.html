@@ -15,12 +15,12 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/SsqXCWmB/3D691CC7-744A-4545-B415-184352388122.png">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/SsqXCWmB/3D691CC7-744A-4545-B415-184352388122.png">
     
-    <title>یارییا بینگۆ - دیزاینا کلاسیک (1 - 99)</title>
+    <title>یارییا بینگۆ (1 - 99)</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* دیزاینا کلاسیک وەکی وێنەی */
+        /* دیزاینا کلاسیک */
         :root {
             --bg-dark-red: #9e0b0f;
             --bg-left-yellow: #fce883;
@@ -119,7 +119,7 @@
             width: 100%;
             padding: 10px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border: 2px solid #5a0000;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
             min-height: 50px;
@@ -136,25 +136,16 @@
         .match-text.hit { color: #00ffcc; transform: scale(1.05); }
         .match-text .highlight-num { color: #ffd700; font-size: 1.3em; font-family: Arial, sans-serif; margin: 0 5px; }
 
-        .speed-control {
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #8b0000;
+        .buttons-row { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 8px; 
+            width: 100%; 
+            margin-bottom: 20px; 
         }
-        .speed-control input {
-            width: 50px;
-            padding: 5px;
-            text-align: center;
-            border: 2px solid #8b0000;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        .buttons-row { display: flex; gap: 10px; width: 100%; margin-bottom: 20px; }
         .btn-modern { 
-            flex: 1; 
-            padding: 15px 10px; 
-            font-size: 16px; 
+            padding: 12px 5px; 
+            font-size: 14px; 
             font-weight: bold; 
             font-family: inherit; 
             border: 2px solid #555; 
@@ -164,6 +155,11 @@
             background: linear-gradient(to bottom, #d4d4d4, #7a7a7a);
             text-shadow: 1px 1px 2px #000;
             box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+        .btn-modern.full-width {
+            grid-column: span 2; 
+            background: linear-gradient(to bottom, #87CEEB, #4682B4); 
         }
         .btn-modern:active { transform: translateY(2px); box-shadow: 0 2px 3px rgba(0,0,0,0.4); }
         .btn-auto.stop-mode { background: linear-gradient(to bottom, #ff6b6b, #c00); }
@@ -175,28 +171,154 @@
             border-radius: 6px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
         }
         .players-header {
             background: var(--bg-dark-red);
             color: white;
-            padding: 6px;
+            padding: 8px 12px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .players-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .btn-menu-toggle {
+            background: #ffd700;
+            border: 2px solid #b8860b;
+            color: #5a0000;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: inherit;
+        }
         
+        .players-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; overflow: hidden; }
+        
+        /* ستایلا مینیۆیێ دگەل سکرۆلێ */
+        .player-menu-content {
+            display: none; 
+            background: #fce883;
+            border: 2px solid #5a0000;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+            max-height: 55vh; 
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        /* ستایلا دوگمەیێن ناڤ مینیۆیێ */
+        .menu-btn-item {
+            background: #e6c200;
+            border: 2px solid #b8860b;
+            color: #5a0000;
+            padding: 10px;
+            width: 100%;
+            text-align: right;
+            font-weight: bold;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            font-family: inherit;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .menu-panel {
+            display: none;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .speed-input-menu {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+            border: 2px solid #8b0000;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: inherit;
+        }
+
+        .btn-sound {
+            background: #fff;
+            border: 2px solid #8b0000;
+            border-radius: 5px;
+            padding: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            color: #8b0000;
+            width: 100%;
+        }
+
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .custom-input { padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-family: inherit; }
         .btn-add { background: linear-gradient(to bottom, #b5b5b5, #7a7a7a); color: white; padding: 10px; font-size: 16px; font-weight: bold; border: 2px solid #555; border-radius: 6px; cursor: pointer; text-shadow: 1px 1px 2px #000; }
-        .btn-clear-all { background: linear-gradient(to bottom, #ff9999, #cc0000); color: white; padding: 10px; width: 100%; font-size: 14px; font-weight: bold; border: 2px solid #555; border-radius: 6px; cursor: pointer; text-shadow: 1px 1px 2px #000; margin-top: 5px; }
+        .btn-clear-all { background: linear-gradient(to bottom, #ff9999, #cc0000); color: white; padding: 10px; width: 100%; font-size: 14px; font-weight: bold; border: 2px solid #555; border-radius: 6px; cursor: pointer; text-shadow: 1px 1px 2px #000; margin-top: 8px; }
 
-        .players-list { text-align: right; max-height: 150px; overflow-y: auto; padding-right: 5px; }
-        .player-card { background: #f0f0f0; padding: 8px; margin-bottom: 5px; border-radius: 4px; border: 1px solid #ccc; display: flex; flex-direction: column; gap: 5px; }
-        .player-card.safe { background: #90ee90; }
-        .player-name { font-weight: bold; font-size: 15px; display: flex; justify-content: space-between; color: #000; }
-        .safe-badge { color: #006400; font-size: 12px; }
-        .btn-edit { background: #ffd700; color: #000; border: 1px solid #b8860b; padding: 3px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .players-list { text-align: right; overflow-y: auto; padding-right: 5px; flex: 1;}
         
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .players-table th, .players-table td {
+            border: 1px solid #ddd;
+            padding: 6px 4px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .players-table th {
+            background: #fce883; 
+            color: #5a0000;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .players-table td {
+            font-size: 13px;
+            color: #000;
+        }
+        .players-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .players-table tr.safe {
+            background-color: #90ee90 !important;
+        }
+        .btn-edit-table {
+            background: #ffd700;
+            color: #000;
+            border: 1px solid #b8860b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .safe-badge { color: #006400; font-size: 11px; font-weight: bold;}
+
         /* ----- ستایلا بەشێ ڕاستێ (بۆرد) ----- */
         .bingo-board {
             display: grid;
@@ -236,7 +358,7 @@
             transform: scale(1.15);
         }
 
-        .number-circle { display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; background: #fff; border-radius: 50%; margin: 2px; font-weight: bold; color: #333; font-size: 12px; border: 2px solid #ccc; font-family: Arial; }
+        .number-circle { display: inline-block; width: 26px; height: 26px; line-height: 26px; text-align: center; background: #fff; border-radius: 50%; margin: 2px; font-weight: bold; color: #333; font-size: 13px; border: 2px solid #ccc; font-family: Arial; }
         .number-circle.matched { background: radial-gradient(circle at 30% 30%, #da70d6, #800080); color: white; border-color: #4b0082; }
 
         .celebration-toast {
@@ -260,10 +382,9 @@
             .right-panel { flex: 1.5; justify-content: center; align-items: center; }
             .bingo-board { width: 100%; max-width: 75vh; margin: auto; gap: 4px; }
             .board-cell { font-size: 2.5vh; }
-            .players-list { max-height: 25vh; }
         }
 
-        /* ===== چارەسەرییا لاندسکەیپ (فول سکرین و پاراستنا بازنەیان) ===== */
+        /* ===== چارەسەرییا لاندسکەیپ ===== */
         @media (orientation: landscape) and (max-height: 600px) {
             body { 
                 padding: 0; 
@@ -289,7 +410,7 @@
                 flex-direction: row; 
                 align-items: stretch; 
                 justify-content: center; 
-                gap: 4px; 
+                gap: 6px; 
                 height: 100%; 
                 width: 100%;
                 overflow: hidden;
@@ -297,16 +418,16 @@
             
             .left-panel { 
                 flex: 1; 
-                max-width: 40%; 
+                max-width: 32%; 
                 height: 96vh; 
                 overflow-y: auto; 
-                padding: 12px; 
+                padding: 10px; 
                 box-sizing: border-box;
                 margin: auto 0;
             }
             
             .right-panel { 
-                flex: 0 0 auto; 
+                flex: 1.2; 
                 height: 96vh; 
                 padding: 2px; 
                 display: flex; 
@@ -315,17 +436,15 @@
                 background: none;
                 border: none;
                 box-sizing: border-box;
-                overflow: hidden; 
             }
             
             .players-section { 
                 flex: 1; 
-                max-width: 40%; 
+                max-width: 35%; 
                 display: flex; 
                 flex-direction: column; 
                 height: 96vh;
                 margin: auto 0;
-                padding: 12px;
                 box-sizing: border-box;
             }
 
@@ -333,11 +452,11 @@
                 display: grid;
                 grid-template-columns: repeat(10, 1fr);
                 grid-template-rows: repeat(10, 1fr);
-                height: min(94vh, 55vw); 
-                width: min(94vh, 55vw); 
+                height: min(92vh, 48vw); 
+                width: min(92vh, 48vw); 
                 gap: 3px; 
                 margin: auto;
-                padding: 5px;
+                padding: 6px;
                 box-sizing: border-box;
                 flex-shrink: 0; 
                 background: var(--bg-right-gold);
@@ -347,45 +466,64 @@
             
             .board-cell { 
                 font-size: min(3vh, 2vw); 
-                border-width: 1px; 
+                border-width: 1.5px; 
                 width: 100%;
                 height: 100%;
-                aspect-ratio: 1 / 1; 
+                aspect-ratio: auto; 
                 margin: 0;
             }
             
+            /* ---- گۆهۆڕینا سەرەکی: مەزنکرنا بازنەیا ژمارەیان د لاندسکەیپێ دا ---- */
             .monitor-box { 
-                width: 20vh; 
-                height: 20vh; 
-                border-width: 6px; 
+                width: 26vh;      /* ل ڤێرە هاتییە مەزنکرن */
+                height: 26vh;     /* ل ڤێرە هاتییە مەزنکرن */
+                border-width: 8px; /* خەتێ زەر هاتییە مەزنکرن */
                 margin: 0 auto 10px; 
                 padding: 0;
                 flex-shrink: 0; 
                 aspect-ratio: 1 / 1;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.4), inset 0 -6px 12px rgba(0,0,0,0.1);
             }
-            #drawnNumberDisplay { font-size: 9vh; line-height: 1; } 
+            #drawnNumberDisplay { font-size: 11vh; line-height: 1; } /* ژمارەیا ناڤ دا مەزنتر لێهات */
             
             .match-display { min-height: 40px; padding: 10px; margin-bottom: 10px; width: 100%; box-sizing: border-box; }
-            .match-text { font-size: 3vh; }
-            .match-text .highlight-num { font-size: 3.5vh; }
+            .match-text { font-size: 2.8vh; }
+            .match-text .highlight-num { font-size: 3.2vh; }
             
-            .speed-control { margin-bottom: 10px; font-size: 2.8vh; padding: 10px;}
-            .speed-control input { padding: 4px; font-size: 2.8vh; width: 55px;}
+            .buttons-row { margin-bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;}
+            .btn-modern { padding: 12px; font-size: 2.4vh; min-height: 40px; } 
             
-            .buttons-row { margin-bottom: 10px; flex-direction: column; gap: 8px;}
-            .btn-modern { padding: 12px; font-size: 2.8vh; min-height: 45px; } 
+            .players-header { font-size: 2.2vh; padding: 8px; }
+            .btn-menu-toggle { font-size: 2vh; padding: 4px 8px;}
             
-            .players-header { font-size: 2.5vh; padding: 10px; }
             .players-body { padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
-            .input-group { margin-bottom: 0; gap: 8px;}
-            .custom-input { padding: 10px; font-size: 2.5vh; }
-            .btn-add { padding: 10px; font-size: 2.5vh; }
-            .btn-clear-all { padding: 10px; font-size: 2.2vh; margin-top: 0; margin-bottom: 5px;}
+            
+            .player-menu-content { 
+                padding: 8px; 
+                max-height: 55vh; 
+            }
+            .menu-btn-item { padding: 8px; font-size: 2vh;}
+            
+            .input-group { margin-bottom: 0; gap: 6px;}
+            .custom-input { padding: 8px; font-size: 2.2vh; }
+            .speed-input-menu { padding: 4px; font-size: 2vh; width: 45px;}
+            .btn-sound { font-size: 2.2vh; padding: 6px; margin-bottom: 10px;}
+            .btn-add { padding: 8px; font-size: 2.2vh; }
+            .btn-clear-all { padding: 8px; font-size: 2vh; margin-top: 5px; margin-bottom: 0;}
             
             .players-list { flex: 1; max-height: none; overflow-y: auto; padding-right: 5px; }
-            .player-card { padding: 10px; margin-bottom: 6px; }
-            .player-name { font-size: 2.5vh; }
-            .number-circle { width: 3.5vh; height: 3.5vh; line-height: 3.5vh; font-size: 2vh; }
+            
+            .players-table th, .players-table td { padding: 4px; font-size: 2vh; }
+            .btn-edit-table { font-size: 1.8vh; padding: 3px 6px; }
+            .safe-badge { font-size: 1.5vh; }
+            
+            .number-circle { 
+                width: 4.5vh;  
+                height: 4.5vh; 
+                line-height: 4.5vh; 
+                font-size: 2.5vh; 
+                margin: 2px;
+            }
             
             .celebration-toast { font-size: 2em; padding: 20px; width: 85%; }
         }
@@ -395,6 +533,7 @@
             .bingo-board { gap: 3px; max-width: 100%; padding: 10px;}
             .board-cell { font-size: 13px; border-width: 2px;}
             #drawnNumberDisplay { font-size: 4em; }
+            .buttons-row { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -416,14 +555,10 @@
                     <div class="match-text" id="matchText">چاڤەڕێی ڕاکێشانێ یە...</div>
                 </div>
 
-                <div class="speed-control">
-                    <label for="speedInput">لەزاتیا یاریێ (سانیە):</label>
-                    <input type="number" id="speedInput" min="1" max="30" value="3">
-                </div>
-
                 <div class="buttons-row">
-                    <button class="btn-modern btn-draw" onclick="drawNumber()">ڕاکێشان (١ جار)</button>
+                    <button class="btn-modern btn-draw" onclick="manualDraw()">ڕاکێشان (١ جار)</button>
                     <button class="btn-modern btn-auto" id="autoBtn" onclick="toggleAutoDraw()">ستارت (Start)</button>
+                    <button class="btn-modern full-width" onclick="resetGame()">🔄 نوی کرن (دەستپێکرنا یاریەکا نوی)</button>
                 </div>
 
             </div>
@@ -433,14 +568,35 @@
             </div>
 
             <div class="players-section">
-                <div class="players-header">تۆمارکرنا یاریزانان</div>
+                <div class="players-header">
+                    <span>لیستا یاریزانان</span>
+                    <button class="btn-menu-toggle" onclick="togglePlayerMenu()">☰ مینۆ</button>
+                </div>
+                
                 <div class="players-body">
-                    <div class="input-group">
-                        <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
-                        <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 13, 5, 94)">
-                        <button class="btn-add" onclick="addPlayer()">Change (زێدەبکە)</button>
+                    <div id="playerMenuContent" class="player-menu-content">
+                        
+                        <button class="menu-btn-item" onclick="toggleSubMenu('settingsPanel')">⚙️ ڕێکخستن</button>
+                        <div id="settingsPanel" class="menu-panel">
+                            <div class="settings-row">
+                                <label for="speedInput" style="font-size: 14px; font-weight: bold; color: #8b0000;">لەزاتی (چرکە):</label>
+                                <input type="number" id="speedInput" class="speed-input-menu" min="1" max="30" value="3">
+                            </div>
+                            <button class="btn-sound" id="soundBtn" onclick="toggleSoundMode()">🔊 دەنگ + خواندن</button>
+                        </div>
+
+                        <button class="menu-btn-item" onclick="toggleSubMenu('addPlayerPanel')">➕ زێدەکرنا یاریزانان</button>
+                        <div id="addPlayerPanel" class="menu-panel">
+                            <div class="input-group">
+                                <input type="text" id="playerName" class="custom-input" placeholder="ناڤێ یاریزانی (نموونە: بـــژار)">
+                                <input type="text" id="playerNumbers" class="custom-input" placeholder="ژمارەیێن وی (نموونە: 13, 5, 94)">
+                                <button class="btn-add" onclick="addPlayer()">Change (زێدەبکە)</button>
+                            </div>
+                            <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
+                        </div>
+                        
                     </div>
-                    <button class="btn-clear-all" onclick="clearAllPlayers()">🗑 ڕەشکرنا هەمی یاریزانان</button>
+
                     <div class="players-list" id="playersList"></div>
                 </div>
             </div>
@@ -460,11 +616,67 @@
         let isAutoPlaying = false;
         let audioCtx;
         let celebrationTimeout; 
+        
+        // مودێ دەنگی: 2 = دەنگ + خواندن، 1 = بتنێ موزیک، 0 = بێ دەنگ
+        let soundMode = 2; 
 
         window.onload = function() {
             initBoard();
             loadGameState(); 
         };
+
+        // ڤەکرن و گرتنا مینیۆیا سەرەکی
+        function togglePlayerMenu() {
+            const menu = document.getElementById('playerMenuContent');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        // ڤەکرن و گرتنا بەشێن د ناڤ مینیۆیێ دا (وەک ئەکۆردیۆن)
+        function toggleSubMenu(id) {
+            const panel = document.getElementById(id);
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                document.getElementById('settingsPanel').style.display = 'none';
+                document.getElementById('addPlayerPanel').style.display = 'none';
+                
+                panel.style.display = 'block';
+            }
+        }
+
+        function toggleSoundMode() {
+            const btn = document.getElementById('soundBtn');
+            soundMode = (soundMode - 1 < 0) ? 2 : soundMode - 1;
+            
+            if (soundMode === 2) {
+                btn.innerText = "🔊 دەنگ + خواندن";
+            } else if (soundMode === 1) {
+                btn.innerText = "🎵 بتنێ موزیک";
+            } else {
+                btn.innerText = "🔇 بێ دەنگ";
+            }
+        }
+
+        function speakNumber(number) {
+            if (soundMode !== 2) return; 
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                const msg = new SpeechSynthesisUtterance();
+                msg.text = number.toString();
+                const voices = window.speechSynthesis.getVoices();
+                msg.voice = voices.find(voice => voice.lang.includes('en')) || voices[0];
+                msg.rate = 1.0;
+                msg.pitch = 1.1;
+                
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
         function saveGameState() {
             localStorage.setItem('bingo1to99Players', JSON.stringify(players));
@@ -491,6 +703,8 @@
         }
 
         function playSound(type) {
+            if (soundMode === 0) return; 
+            
             if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -501,15 +715,15 @@
 
             if (type === 'draw') {
                 osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.1);
             } else if (type === 'safe') {
                 osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             } else if (type === 'lose') {
                 osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 1.5);
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
                 osc.start(); osc.stop(audioCtx.currentTime + 1.5);
             }
         }
@@ -557,6 +771,9 @@
             nameInput.value = ''; numsInput.value = '';
             saveGameState(); 
             renderPlayers();
+            
+            // گرتنا مینیۆیێ پشتی زێدەکرنێ
+            document.getElementById('playerMenuContent').style.display = 'none';
         }
 
         function editPlayer(id) {
@@ -568,6 +785,11 @@
                 players.splice(playerIndex, 1);
                 saveGameState(); 
                 renderPlayers();
+                
+                // ڤەکرنا مینیۆیێ و بەشێ زێدەکرنێ بۆ دەستکاریکرنێ
+                document.getElementById('playerMenuContent').style.display = 'block';
+                document.getElementById('settingsPanel').style.display = 'none';
+                document.getElementById('addPlayerPanel').style.display = 'block';
             }
         }
 
@@ -582,35 +804,71 @@
                 document.getElementById('matchText').classList.remove('hit');
                 initBoard(); 
                 renderPlayers();
+                
+                document.getElementById('playerMenuContent').style.display = 'none';
             }
         }
 
         function renderPlayers() {
             const list = document.getElementById('playersList');
-            list.innerHTML = '';
+            
+            if (players.length === 0) {
+                list.innerHTML = '';
+                return;
+            }
+
+            let tableHTML = `
+                <table class="players-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">ناڤ</th>
+                            <th style="width: 55%;">ژمارە</th>
+                            <th style="width: 20%;">دەستکاری</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
             players.forEach(p => {
-                const card = document.createElement('div');
-                card.className = `player-card ${p.isSafe ? 'safe' : ''}`;
                 let numsHtml = p.numbers.map(n => {
                     let isMatched = drawnNumbers.includes(n) ? 'matched' : '';
                     return `<span class="number-circle ${isMatched}">${n}</span>`;
                 }).join('');
-                card.innerHTML = `
-                    <div class="player-info">
-                        <div class="player-name">
-                            <span>${p.name} ${p.isSafe ? '<span class="safe-badge">(قورتال بوو)</span>' : ''}</span>
-                            ${!p.isSafe && drawnNumbers.length === 0 ? `<button class="btn-edit" onclick="editPlayer(${p.id})">دەستکاری</button>` : ''}
-                        </div>
-                        <div style="margin-top:10px;">${numsHtml}</div>
-                    </div>`;
-                list.appendChild(card);
+
+                let rowClass = p.isSafe ? 'safe' : '';
+                let safeText = p.isSafe ? '<br><span class="safe-badge">(قورتال بوو)</span>' : '';
+                let actionHtml = (!p.isSafe && drawnNumbers.length === 0) 
+                                 ? `<button class="btn-edit-table" onclick="editPlayer(${p.id})">دەستکاری</button>` 
+                                 : '';
+
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td><strong>${p.name}</strong>${safeText}</td>
+                        <td>${numsHtml}</td>
+                        <td>${actionHtml}</td>
+                    </tr>
+                `;
             });
+
+            tableHTML += `</tbody></table>`;
+            list.innerHTML = tableHTML;
+        }
+
+        function manualDraw() {
+            if (players.length < 2) { 
+                alert('ب لایەنی ڤە پێدڤییە ٢ یاریزان بهێنە تۆمارکرن بۆ دەستپێکرنا یاریێ!'); 
+                return; 
+            }
+            drawNumber();
         }
 
         function toggleAutoDraw() {
-            if (players.length < 2) { alert('ب لایەنی ڤە پێدڤییە ٢ یاریزان هەبن بۆ ڤێ یاریێ!'); return; }
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (players.length < 2) { 
+                alert('ب لایەنی ڤە پێدڤییە ٢ یاریزان بهێنە تۆمارکرن بۆ دەستپێکرنا یاریێ!'); 
+                return; 
+            }
+            if (!audioCtx && soundMode !== 0) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 
             const btn = document.getElementById('autoBtn');
             const speedInput = document.getElementById('speedInput');
@@ -626,7 +884,6 @@
                 isAutoPlaying = true;
                 btn.innerText = "پاوس (Pause)";
                 btn.classList.add('stop-mode');
-                speedInput.disabled = true; 
                 
                 drawNumber(); 
                 autoInterval = setInterval(drawNumber, speedSeconds * 1000); 
@@ -637,10 +894,8 @@
             isAutoPlaying = false;
             clearInterval(autoInterval);
             const btn = document.getElementById('autoBtn');
-            const speedInput = document.getElementById('speedInput');
             btn.innerText = "ستارت (Start)";
             btn.classList.remove('stop-mode');
-            speedInput.disabled = false; 
         }
 
         function showCelebration(namesArray) {
@@ -663,7 +918,10 @@
             } while (drawnNumbers.includes(drawn));
             
             drawnNumbers.push(drawn);
+            
             playSound('draw');
+            speakNumber(drawn); 
+            
             saveGameState(); 
 
             const display = document.getElementById('drawnNumberDisplay');
@@ -725,19 +983,26 @@
         }
 
         function resetGame() {
-            stopAutoMode();
-            drawnNumbers = []; 
-            players.forEach(p => p.isSafe = false); 
-            saveGameState(); 
+            if (drawnNumbers.length === 0) {
+                document.getElementById('winnerModal').style.display = 'none';
+                return;
+            }
+            
+            if (confirm("ئایا تو دڤێتی یاریێ ژ نوی دەستپێبکەی؟\n(ژمارەیێن دەرکەفتی دێ هێنە ڕەشکرن، بەلێ یاریزان دێ مینن)")) {
+                stopAutoMode();
+                drawnNumbers = []; 
+                players.forEach(p => p.isSafe = false); 
+                saveGameState(); 
 
-            clearTimeout(celebrationTimeout);
-            document.getElementById('celebrationToast').classList.remove('show');
-            document.getElementById('drawnNumberDisplay').innerText = '--';
-            document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
-            document.getElementById('matchText').classList.remove('hit');
-            document.getElementById('winnerModal').style.display = 'none';
-            initBoard(); 
-            renderPlayers();
+                clearTimeout(celebrationTimeout);
+                document.getElementById('celebrationToast').classList.remove('show');
+                document.getElementById('drawnNumberDisplay').innerText = '--';
+                document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
+                document.getElementById('matchText').classList.remove('hit');
+                document.getElementById('winnerModal').style.display = 'none';
+                initBoard(); 
+                renderPlayers();
+            }
         }
     </script>
 </body>
