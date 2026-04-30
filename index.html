@@ -100,7 +100,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 10px auto 10px;
+            margin: 10px auto 10px; /* کێمکرنا مەودایێ ژێرین */
             box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 -6px 10px rgba(0,0,0,0.1);
         }
         
@@ -111,23 +111,20 @@
             font-family: Arial, sans-serif;
         }
 
-        /* ستایلا هژمارکەرا ژمارەیێن ماین */
+        /* ستایلا نوی بۆ بۆکسێ ژمارەیا ماینە */
         .remaining-count {
-            background: #fff;
+            display: inline-block;
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            border: 2px solid #cba85a;
             color: #8b0000;
+            font-size: 16px;
             font-weight: bold;
-            font-size: 15px;
-            padding: 4px 15px;
+            font-family: 'Noto Sans Arabic', Arial, sans-serif;
+            padding: 6px 20px;
             border-radius: 20px;
-            border: 2px solid #5a0000;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            display: inline-block;
-            direction: ltr; /* بۆ دروست نیشاندانا هژماران */
-        }
-        .remaining-count span {
-            direction: rtl;
-            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
         .pop-animation { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -235,7 +232,6 @@
             flex-shrink: 0;
         }
 
-        /* ستایلا دوگمەیێن ناڤ مینیۆیێ */
         .menu-btn-item {
             background: #e6c200;
             border: 2px solid #b8860b;
@@ -359,9 +355,11 @@
         .players-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        /* --- ڕەنگێ قورتالبووی (کەسک) --- */
         .players-table tr.safe {
             background-color: #90ee90 !important;
         }
+        /* --- ڕەنگێ خوسارەتی (سۆر) و جوانکرنا وێ --- */
         .players-table tr.loser {
             background-color: #ff4d4d !important;
         }
@@ -624,12 +622,11 @@
                 margin: 0;
             }
             
-            /* ---- گۆهۆڕینا سەرەکی: مەزنکرنا بازنەیا ژمارەیان د لاندسکەیپێ دا ---- */
             .monitor-box { 
                 width: 26vh;      
                 height: 26vh;     
                 border-width: 8px; 
-                margin: 0 auto 5px; 
+                margin: 0 auto 8px; 
                 padding: 0;
                 flex-shrink: 0; 
                 aspect-ratio: 1 / 1;
@@ -637,12 +634,13 @@
             }
             #drawnNumberDisplay { font-size: 11vh; line-height: 1; } 
             
-            .remaining-count {
-                font-size: 2.2vh;
-                margin-bottom: 8px;
-                padding: 2px 10px;
+            /* ستایلا لاندسکەیپ بۆ بۆکسێ */
+            .remaining-count { 
+                font-size: 2.2vh; 
+                margin-bottom: 12px; 
+                padding: 4px 12px;
             }
-
+            
             .match-display { min-height: 40px; padding: 10px; margin-bottom: 10px; width: 100%; box-sizing: border-box; }
             .match-text { font-size: 2.8vh; }
             .match-text .highlight-num { font-size: 3.2vh; }
@@ -722,8 +720,7 @@
                 <div class="monitor-box">
                     <div id="drawnNumberDisplay">--</div>
                 </div>
-
-                <div id="remainingNumbersDisplay" class="remaining-count">ماینە <span>(99/99)</span></div>
+                <div id="remainingCountDisplay" class="remaining-count">(99/99) ماینە</div>
 
                 <div class="match-display" id="matchDisplay">
                     <div class="match-text" id="matchText">چاڤەڕێی ڕاکێشانێ یە...</div>
@@ -827,15 +824,12 @@
             initBoard();
             loadGameState(); 
             updateMenuState(); 
+            updateRemainingCount(); // نوی کرن
         };
 
-        // فەنکشنێ نوی بۆ ئەپدەیتکرنا هژمارکەرێ ژمارەیان
         function updateRemainingCount() {
-            let rem = 99 - drawnNumbers.length;
-            let displayElem = document.getElementById('remainingNumbersDisplay');
-            if(displayElem) {
-                displayElem.innerHTML = `ماینە <span>(${rem}/99)</span>`;
-            }
+            let remain = 99 - drawnNumbers.length;
+            document.getElementById('remainingCountDisplay').innerText = `(${remain}/99) ماینە`;
         }
 
         function updateMenuState() {
@@ -989,7 +983,6 @@
             if (savedDrawn) { drawnNumbers = JSON.parse(savedDrawn); }
 
             renderPlayers();
-            updateRemainingCount(); // هژمارکەر لۆد بکە
 
             if (drawnNumbers.length > 0) {
                 drawnNumbers.forEach(n => {
@@ -1059,15 +1052,13 @@
                 return;
             }
 
-            for (let i = 0; i < players.length; i++) {
-                let existingNumbers = players[i].numbers;
-                if (existingNumbers.length === uniqueNumbers.length) {
-                    let isCompletelyIdentical = uniqueNumbers.every(num => existingNumbers.includes(num));
-                    if (isCompletelyIdentical) {
-                        alert(`لێبۆرینێ دخوازم!\nئەڤ کۆما ژمارەیان ب تەمامی یا وەکی یا یاریزان "${players[i].name}" یە.\nپێدڤییە ب لایەنی ڤە ژمارەیەکا جودا هەبیت بۆ کو بشێی خۆ تۆمار بکەی.`);
-                        return; 
-                    }
-                }
+            let allUsedNumbers = [];
+            players.forEach(p => { allUsedNumbers = allUsedNumbers.concat(p.numbers); });
+            let duplicateFound = numbers.find(n => allUsedNumbers.includes(n));
+            
+            if (duplicateFound !== undefined) {
+                alert(`لێبۆڕینێ دخوازم، ژمارە (${duplicateFound}) پێشتر ژ لایێ کەسەکێ دی ڤە هاتییە هەلبژارتن!\nهیڤییە ژمارەیەکا دی بنڤیسە.`);
+                return;
             }
 
             players.push({ id: Date.now(), name: name, numbers: numbers, isSafe: false, isLoser: false });
@@ -1125,8 +1116,7 @@
                 }
                 initBoard(); 
                 renderPlayers();
-                updateRemainingCount(); // سفرکرنا هژمارکەری
-                
+                updateRemainingCount(); // نوی کرن
                 document.getElementById('playerMenuContent').style.display = 'none';
             }
         }
@@ -1273,13 +1263,14 @@
             speakNumber(drawn); 
             
             saveGameState(); 
-            updateRemainingCount(); // هژمارکەر کێم بکە
 
             const display = document.getElementById('drawnNumberDisplay');
             display.innerText = drawn < 10 ? '0' + drawn : drawn; 
             display.classList.remove('pop-animation');
             void display.offsetWidth; 
             display.classList.add('pop-animation');
+            
+            updateRemainingCount(); // نوی کرن بۆ کێمکرنا ژمارێ
 
             document.getElementById('cell-' + drawn).classList.add('drawn');
             
@@ -1330,7 +1321,7 @@
                 stopAutoMode(); 
                 playSound('lose'); 
                 const loser = remainingPlayers[0];
-                loser.isLoser = true; 
+                loser.isLoser = true; // دەستنیشانکرنا خوسارەتی بۆ ڕەنگێ سۆر
                 saveGameState();
                 
                 if (alertsEnabled.lose) {
@@ -1357,13 +1348,14 @@
                 drawnNumbers = []; 
                 players.forEach(p => { 
                     p.isSafe = false; 
-                    p.isLoser = false; 
+                    p.isLoser = false; // پاقژکرنا ڕەنگێ سۆر
                 }); 
                 saveGameState(); 
 
                 clearTimeout(celebrationTimeout);
                 document.getElementById('celebrationToast').classList.remove('show');
                 document.getElementById('drawnNumberDisplay').innerText = '--';
+                updateRemainingCount(); // نوی کرن بۆ (99/99) ماینە
                 
                 if (alertsEnabled.draw) {
                     document.getElementById('matchText').innerHTML = 'چاڤەڕێی ڕاکێشانێ یە...';
@@ -1372,8 +1364,8 @@
                 document.getElementById('winnerModal').style.display = 'none';
                 
                 initBoard(); 
+                
                 renderPlayers();
-                updateRemainingCount(); // نویکرنا هژمارکەری ل دەمێ ڕیسێتێ
             }
         }
     </script>
